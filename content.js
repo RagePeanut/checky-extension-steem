@@ -1,6 +1,7 @@
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]{1,16}[a-z\d])([\w(]|\.[a-z])?/gimu; 
 
 let checkPostTimeout;
+let checkyDiv;
 let tbody;
 
 chrome.runtime.onMessage.addListener(insertMarkups);
@@ -11,7 +12,7 @@ chrome.runtime.onMessage.addListener(insertMarkups);
 function insertMarkups() {
     const textarea = document.querySelector("textarea");
     textarea.addEventListener("input", resetCheckPostTimeout);
-    const toInsert = '<div id="checky" class="vframe__section--shrink">'
+    const toInsert = "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
             + "<h6>Possibly wrong mentions</h6>"
             + "<table>"
                 + "<thead>"
@@ -20,9 +21,10 @@ function insertMarkups() {
                 + "</thead>"
                 + "<tbody></tbody>"
             + "</table>"
-        + '</div>';
+        + "</div>";
     document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", toInsert);
-    tbody = document.querySelector("#checky tbody");
+    checkyDiv = document.getElementById("checky");
+    tbody = checkyDiv.getElementsByTagName("tbody")[0];
     checkPostTimeout = setTimeout(checkPost, 1000, textarea.value);
 }
 
@@ -70,15 +72,16 @@ function filterWrongUsernames(usernames, callback) {
  * @param {string[]} mentions The mentions to include in the rows
  */
 function insertTableRows(mentions) {
-    if(tbody == null) {
+    if(checkyDiv == null) {
         console.log("The table hasn't been inserted yet");
         return;
     }
-    const buttons = '<button name="give_suggestions" class="button" style="margin-bottom: 0; font-size: 1rem"><span>Replace</span></button>'
-        + '<button class="button hollow no-border" style="margin-bottom: 0">Ignore</button>';
+    const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\"><span>Replace</span></button>"
+        + "<button class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
     let toInsert = "";
     for(const mention of mentions) {
-        toInsert += "<tr><td>" + mention + "</td><td>" + buttons + "</td></tr>";
+        toInsert += "<tr><td>" + mention + "</td><td id=\"checky__" + mention + "-actions\">" + buttons + "</td></tr>";
         tbody.innerHTML = toInsert;
     }
+    checkyDiv.style.display = "block";
 }
