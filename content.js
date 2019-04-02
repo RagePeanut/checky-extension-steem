@@ -31,7 +31,7 @@ function insertMarkups() {
  */
 function resetCheckPostTimeout() {
     clearTimeout(checkPostTimeout);
-    checkPostTimeout = setTimeout(checkPost, 5000, this.value);
+    checkPostTimeout = setTimeout(checkPost, 1000, this.value);
 }
 
 /**
@@ -42,7 +42,7 @@ function resetCheckPostTimeout() {
 function checkPost(post) {
     let matches = post.match(mentionRegex);
     if(matches != null) {
-        matches = matches.map(mention => mention.substring(2));
+        matches = matches.map(mention => mention.split("@")[1]);
         filterWrongUsernames(matches, insertTableRows)
     }
 }
@@ -74,8 +74,9 @@ function insertTableRows(mentions) {
         console.log("The table hasn't been inserted yet");
         return;
     }
+    let toInsert = "";
     for(const mention of mentions) {
-        const toInsert = "<tr><td>" + mention + "</td><td></td></tr>";
-        tbody.insertAdjacentHTML("beforeend", toInsert);
+        toInsert += "<tr><td>" + mention + "</td><td></td></tr>";
+        tbody.innerHTML = toInsert;
     }
 }
