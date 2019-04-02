@@ -1,4 +1,4 @@
-const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]{1,16}[a-z\d])([\w(]|\.[a-z])?/gimu; 
+const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])([\w(]|\.[a-z])?/gimu; 
 
 let checkPostTimeout;
 let checkyDiv;
@@ -46,6 +46,10 @@ function changeRowContent(event) {
                 break;
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
+                td.parentElement.remove();
+                if(!tbody.hasChildNodes()) {
+                    checkyDiv.style.display = "none";
+                }
                 break;
             default:
                 console.log("Wrong button name");
@@ -63,7 +67,6 @@ function ignoreUsername(username) {
         ignored.push(username);
         chrome.storage.sync.set({ignored: ignored});
     }
-    document.getElementById("checky__row-" + username).remove();
 }
 
 /**
@@ -85,6 +88,8 @@ function checkPost(post) {
         matches = matches.map(mention => mention.split("@")[1]);
         filterWrongUsernames(matches, insertTableRows)
     }
+    tbody.innerHTML = "";
+    checkyDiv.style.display = "none";
 }
 
 /**
@@ -101,7 +106,12 @@ function filterWrongUsernames(usernames, callback) {
         }
         const correctUsernames = resp.filter(user => user != null).map(user => user.name);
         const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username) && !ignored.includes(username));
-        callback(wrongUsernames);
+        if(wrongUsernames.length > 0) {
+            callback(wrongUsernames);
+        } else {
+            tbody.innerHTML = "";
+            checkyDiv.style.display = "none";
+        }
     });
 }
 
@@ -111,10 +121,6 @@ function filterWrongUsernames(usernames, callback) {
  * @param {string[]} mentions The mentions to include in the rows
  */
 function insertTableRows(mentions) {
-    if(checkyDiv == null) {
-        console.log("The table hasn't been inserted yet");
-        return;
-    }
     const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
         + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
     let toInsert = "";
