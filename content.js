@@ -40,22 +40,28 @@ function resetCheckPostTimeout() {
  * @param {string} post The post to check
  */
 function checkPost(post) {
-    const matches = post.match(mentionRegex);
+    let matches = post.match(mentionRegex);
     if(matches != null) {
-        const wrongMentions = matches.map(mention => mention.substring(2))
-                                     .filter(mention => !isExistingUsername(mention));
-        insertTableRows(wrongMentions);
+        matches = matches.map(mention => mention.substring(2));
+        filterWrongUsernames(matches, insertTableRows)
     }
 }
 
 /**
- * Checks if the username exists on Steem.
+ * Filters the usernames that don't exist on Steem from an array of usernames.
  * 
- * @param {string} username The username to check
+ * @param {string[]} username The usernames to filter
  */
-function isExistingUsername(username) {
-    // TODO: check with steemjs if a user has the given username
-    return false;
+function filterWrongUsernames(usernames, callback) {
+    steem.api.lookupAccountNames(usernames, (err, resp) => {
+        if(err) {
+            console.log(err);
+            return;
+        }
+        const correctUsernames = resp.filter(user => user != null).map(user => user.name);
+        const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username));
+        callback(wrongUsernames);
+    });
 }
 
 /**
@@ -65,6 +71,7 @@ function isExistingUsername(username) {
  */
 function insertTableRows(mentions) {
     if(tbody == null) {
+        console.log("The table hasn't been inserted yet");
         return;
     }
     for(const mention of mentions) {
