@@ -9,21 +9,21 @@ chrome.runtime.onMessage.addListener(insertMarkups);
  * Inserts the base markups added by the extension to post submitters pages.
  */
 function insertMarkups() {
-    document.querySelector("textarea").addEventListener("input", resetCheckPostTimeout);
+    const textarea = document.querySelector("textarea");
+    textarea.addEventListener("input", resetCheckPostTimeout);
     const toInsert = '<div id="checky" class="vframe__section--shrink">'
-            + "<div>"
-                + "<h6>Possibly wrong mentions</h6>"
-                + "<table>"
-                    + "<thead>"
-                        + "<th>Mention</th>"
-                        + "<th>Suggestions</th>"
-                    + "</thead>"
-                    + "<tbody></tbody>"
-                + "</table>"
-            + "</div>"
+            + "<h6>Possibly wrong mentions</h6>"
+            + "<table>"
+                + "<thead>"
+                    + "<th>Mention</th>"
+                    + "<th>Suggestions</th>"
+                + "</thead>"
+                + "<tbody></tbody>"
+            + "</table>"
         + '</div>';
     document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", toInsert);
     tbody = document.querySelector("#checky tbody");
+    checkPostTimeout = setTimeout(checkPost, 1000, textarea.value);
 }
 
 /**
