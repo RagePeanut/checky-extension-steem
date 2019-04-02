@@ -1,0 +1,18 @@
+{
+    "manifest_version": 2,
+    "name": "Checky",
+    "version": "0.0.1",
+    "description": "Checks the mentions before posting on a multitude of apps that post to the Steem blockchain.",
+    "content_scripts": [
+        {
+            "matches": ["*://steemit.com/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "background": {
+        "scripts": ["background.js"]
+    },
+    "permissions": [
+        "tabs"
+    ]
+}
