@@ -3,8 +3,11 @@ const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]{1,16}[a-z\d])([\w(]|\.[a-z])?
 let checkPostTimeout;
 let checkyDiv;
 let tbody;
+let ignored;
 
 chrome.runtime.onMessage.addListener(insertMarkups);
+
+chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || []);
 
 /**
  * Inserts the base markups added by the extension to post submitters pages.
@@ -25,7 +28,42 @@ function insertMarkups() {
     document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", toInsert);
     checkyDiv = document.getElementById("checky");
     tbody = checkyDiv.getElementsByTagName("tbody")[0];
-    checkPostTimeout = setTimeout(checkPost, 1000, textarea.value);
+    tbody.addEventListener("click", changeRowContent);
+    checkPost(textarea.value);
+}
+
+/**
+ * Changes the content of the row in which a button has been clicked.
+ * 
+ * @param {MouseEvent} event An event representing the button click
+ */
+function changeRowContent(event) {
+    const target = event.target;
+    if(target.nodeName == "BUTTON") {
+        const td = target.parentElement;
+        switch(target.name.split("__")[1]) {
+            case "replace":
+                break;
+            case "ignore":
+                ignoreUsername(td.previousElementSibling.innerText);
+                break;
+            default:
+                console.log("Wrong button name");
+        }
+    }
+}
+
+/**
+ * Ignores an username forever.
+ * 
+ * @param {string} username The username to ignore
+ */
+function ignoreUsername(username) {
+    if(!ignored.includes(username)) {
+        ignored.push(username);
+        chrome.storage.sync.set({ignored: ignored});
+    }
+    document.getElementById("checky__row-" + username).remove();
 }
 
 /**
@@ -53,6 +91,7 @@ function checkPost(post) {
  * Filters the usernames that don't exist on Steem from an array of usernames.
  * 
  * @param {string[]} username The usernames to filter
+ * @param {function(string[])} callback A callback taking an array of wrong usernames as its argument
  */
 function filterWrongUsernames(usernames, callback) {
     steem.api.lookupAccountNames(usernames, (err, resp) => {
@@ -61,7 +100,7 @@ function filterWrongUsernames(usernames, callback) {
             return;
         }
         const correctUsernames = resp.filter(user => user != null).map(user => user.name);
-        const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username));
+        const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username) && !ignored.includes(username));
         callback(wrongUsernames);
     });
 }
@@ -76,11 +115,11 @@ function insertTableRows(mentions) {
         console.log("The table hasn't been inserted yet");
         return;
     }
-    const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\"><span>Replace</span></button>"
-        + "<button class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
+    const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
+        + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
     let toInsert = "";
     for(const mention of mentions) {
-        toInsert += "<tr><td>" + mention + "</td><td id=\"checky__" + mention + "-actions\">" + buttons + "</td></tr>";
+        toInsert += "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + buttons + "</td></tr>";
         tbody.innerHTML = toInsert;
     }
     checkyDiv.style.display = "block";
