@@ -16,7 +16,7 @@ function insertMarkups() {
             + "<table>"
                 + "<thead>"
                     + "<th>Mention</th>"
-                    + "<th>Suggestions</th>"
+                    + "<th>Actions</th>"
                 + "</thead>"
                 + "<tbody></tbody>"
             + "</table>"
@@ -74,7 +74,7 @@ function insertTableRows(mentions) {
         console.log("The table hasn't been inserted yet");
         return;
     }
-    const buttons = '<button name="give_suggestions" class="button" style="margin-bottom: 0; font-size: 1rem"><span>Suggestions</span></button>'
+    const buttons = '<button name="give_suggestions" class="button" style="margin-bottom: 0; font-size: 1rem"><span>Replace</span></button>'
         + '<button class="button hollow no-border" style="margin-bottom: 0">Ignore</button>';
     let toInsert = "";
     for(const mention of mentions) {
