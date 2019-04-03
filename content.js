@@ -85,7 +85,10 @@ function resetCheckPostTimeout() {
 function checkPost(post) {
     let matches = post.match(mentionRegex);
     if(matches != null) {
-        matches = matches.map(mention => mention.split("@")[1]);
+        // The check handles the case of matches such as "@@mention"
+        console.log(matches);
+        matches = matches.map(mention => mention[0] == "@" ? mention.split("@")[2] : mention.split("@")[1]);
+        console.log(matches);
         filterWrongUsernames(matches, insertTableRows)
     }
     tbody.innerHTML = "";
