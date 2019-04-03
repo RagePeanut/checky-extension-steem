@@ -1,9 +1,8 @@
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
+const elements = {};
+
 let checkPostTimeout;
-let checkyDiv;
-let tbody;
-let textarea;
 let ignored;
 
 chrome.runtime.onMessage.addListener(insertMarkups);
@@ -14,8 +13,8 @@ chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || [])
  * Inserts the base markups added by the extension to post submitters pages.
  */
 function insertMarkups() {
-    textarea = document.querySelector("textarea");
-    textarea.addEventListener("input", resetCheckPostTimeout);
+    elements.textarea = document.querySelector("textarea");
+    elements.textarea.addEventListener("input", resetCheckPostTimeout);
     const toInsert = "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
             + "<h6>Possibly wrong mentions</h6>"
             + "<table>"
@@ -27,10 +26,10 @@ function insertMarkups() {
             + "</table>"
         + "</div>";
     document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", toInsert);
-    checkyDiv = document.getElementById("checky");
-    tbody = checkyDiv.getElementsByTagName("tbody")[0];
-    tbody.addEventListener("click", changeRowContent);
-    checkPost(textarea.value);
+    elements.checkyDiv = document.getElementById("checky");
+    elements.tbody = elements.checkyDiv.getElementsByTagName("tbody")[0];
+    elements.tbody.addEventListener("click", changeRowContent);
+    checkPost(elements.textarea.value);
 }
 
 /**
@@ -52,8 +51,8 @@ function changeRowContent(event) {
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
                 td.parentElement.remove();
-                if(!tbody.hasChildNodes()) {
-                    checkyDiv.style.display = "none";
+                if(!elements.tbody.hasChildNodes()) {
+                    elements.checkyDiv.style.display = "none";
                 }
                 break;
             case "change":
@@ -93,8 +92,8 @@ function changeUsername(username, newUsername) {
         return;
     }
     const event = new Event("input", { bubbles: true });
-    textarea.value = textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", "gi"), "@" + newUsername);
-    textarea.dispatchEvent(event);
+    elements.textarea.value = elements.textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", "gi"), "@" + newUsername);
+    elements.textarea.dispatchEvent(event);
 }
 
 /**
@@ -120,8 +119,8 @@ function checkPost(post) {
         });
         filterWrongUsernames(matches, insertTableRows)
     } else {
-        tbody.innerHTML = "";
-        checkyDiv.style.display = "none";
+        elements.tbody.innerHTML = "";
+        elements.checkyDiv.style.display = "none";
     }
 }
 
@@ -142,8 +141,8 @@ function filterWrongUsernames(usernames, callback) {
         if(wrongUsernames.length > 0) {
             callback(wrongUsernames);
         } else {
-            tbody.innerHTML = "";
-            checkyDiv.style.display = "none";
+            elements.tbody.innerHTML = "";
+            elements.checkyDiv.style.display = "none";
         }
     });
 }
@@ -159,7 +158,7 @@ function insertTableRows(mentions) {
     let toInsert = "";
     for(const mention of mentions) {
         toInsert += "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + buttons + "</td></tr>";
-        tbody.innerHTML = toInsert;
+        elements.tbody.innerHTML = toInsert;
     }
-    checkyDiv.style.display = "block";
+    elements.checkyDiv.style.display = "block";
 }
