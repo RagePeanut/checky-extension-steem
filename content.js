@@ -1,8 +1,9 @@
-const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])([\w(]|\.[a-z])?/gimu; 
+const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
 let checkPostTimeout;
 let checkyDiv;
 let tbody;
+let textarea;
 let ignored;
 
 chrome.runtime.onMessage.addListener(insertMarkups);
@@ -13,7 +14,7 @@ chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || [])
  * Inserts the base markups added by the extension to post submitters pages.
  */
 function insertMarkups() {
-    const textarea = document.querySelector("textarea");
+    textarea = document.querySelector("textarea");
     textarea.addEventListener("input", resetCheckPostTimeout);
     const toInsert = "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
             + "<h6>Possibly wrong mentions</h6>"
@@ -43,6 +44,10 @@ function changeRowContent(event) {
         const td = target.parentElement;
         switch(target.name.split("__")[1]) {
             case "replace":
+                const newContent = "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + td.previousElementSibling.innerText + " by here.\" required>"
+                    + "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>"
+                    + "<button name=\"checky__back\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Back</button>";
+                td.innerHTML = newContent;
                 break;
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
@@ -50,6 +55,14 @@ function changeRowContent(event) {
                 if(!tbody.hasChildNodes()) {
                     checkyDiv.style.display = "none";
                 }
+                break;
+            case "change":
+                changeUsername(td.previousElementSibling.innerText, target.previousElementSibling.value);
+                break;
+            case "back":
+                const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
+                    + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
+                td.innerHTML = buttons;
                 break;
             default:
                 console.log("Wrong button name");
@@ -67,6 +80,21 @@ function ignoreUsername(username) {
         ignored.push(username);
         chrome.storage.sync.set({ignored: ignored});
     }
+}
+
+/**
+ * Changes all occurences of an username in the textarea by a new username.
+ * 
+ * @param {string} username The username to change
+ * @param {string} newUsername The new username
+ */
+function changeUsername(username, newUsername) {
+    if(!/^[a-z][a-z\d.-]{1,}[a-z\d]$/i.test(newUsername)) {
+        return;
+    }
+    const event = new Event("input", { bubbles: true });
+    textarea.value = textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", "gi"), "@" + newUsername);
+    textarea.dispatchEvent(event);
 }
 
 /**
