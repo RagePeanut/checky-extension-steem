@@ -5,16 +5,27 @@ const elements = {};
 let checkPostTimeout;
 let ignored;
 
-chrome.runtime.onMessage.addListener(insertMarkups);
+chrome.runtime.onMessage.addListener(init);
 
 chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || []);
 
 /**
- * Inserts the base markups added by the extension to post submitters pages.
+ * Initializes the extension variables and DOM elements.
+ */
+function init() {
+    elements.textarea = document.querySelector("textarea");
+    insertMarkups();
+    elements.textarea.addEventListener("input", rescheduleCheckPost);
+    elements.checkyDiv = document.getElementById("checky");
+    elements.tbody = elements.checkyDiv.getElementsByTagName("tbody")[0];
+    elements.tbody.addEventListener("click", changeRowContent);
+    checkPost(elements.textarea.value);
+}
+
+/**
+ * Inserts the base markups added by the extension to post submission pages.
  */
 function insertMarkups() {
-    elements.textarea = document.querySelector("textarea");
-    elements.textarea.addEventListener("input", resetCheckPostTimeout);
     const toInsert = "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
             + "<h6>Possibly wrong mentions</h6>"
             + "<table>"
@@ -26,10 +37,6 @@ function insertMarkups() {
             + "</table>"
         + "</div>";
     document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", toInsert);
-    elements.checkyDiv = document.getElementById("checky");
-    elements.tbody = elements.checkyDiv.getElementsByTagName("tbody")[0];
-    elements.tbody.addEventListener("click", changeRowContent);
-    checkPost(elements.textarea.value);
 }
 
 /**
@@ -107,9 +114,9 @@ function changeUsername(username, newUsername) {
 }
 
 /**
- * Resets the timeout to check the post's mentions.
+ * Reschedules the check of the post's mentions.
  */
-function resetCheckPostTimeout() {
+function rescheduleCheckPost() {
     clearTimeout(checkPostTimeout);
     checkPostTimeout = setTimeout(checkPost, 60000, this.value);
 }
