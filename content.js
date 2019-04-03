@@ -1,6 +1,8 @@
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
 const elements = {};
+let correctMentions = [];
+let wrongMentions = [];
 
 let checkPostTimeout;
 let ignored;
@@ -118,7 +120,7 @@ function changeUsername(username, newUsername) {
  */
 function rescheduleCheckPost() {
     clearTimeout(checkPostTimeout);
-    checkPostTimeout = setTimeout(checkPost, 60000, this.value);
+    checkPostTimeout = setTimeout(checkPost, 100, this.value);
 }
 
 /**
@@ -134,7 +136,22 @@ function checkPost(post) {
             const splits = mention.split("@");
             return (splits[2] || splits[1]).toLowerCase();
         });
-        filterWrongUsernames(matches, insertTableRows)
+        wrongMentions = wrongMentions.filter(mention => {
+            if(!matches.includes(mention)) {
+                removeTableRow(document.getElementById("checky__row-" + mention));
+                return false;
+            }
+            return true;
+        });
+        const newMentions = [];
+        for(const mention of matches) {
+            if(!wrongMentions.concat(correctMentions).includes(mention) && !newMentions.includes(mention)) {
+                newMentions.push(mention);
+            }
+        }
+        if(newMentions.length > 0) {
+            filterWrongUsernames(newMentions, insertTableRows)
+        }
     } else {
         elements.tbody.innerHTML = "";
         elements.checkyDiv.style.display = "none";
@@ -154,15 +171,11 @@ function filterWrongUsernames(usernames, callback) {
             return;
         }
         const correctUsernames = resp.filter(user => user != null).map(user => user.name);
+        correctMentions = correctMentions.concat(correctUsernames.filter(username => !correctMentions.includes(username)));
         const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username) && !ignored.includes(username));
         if(wrongUsernames.length > 0) {
-            const uniqWrongUsernames = [];
-            for(let i = 0; i < wrongUsernames.length; i++) {
-                if(!uniqWrongUsernames.includes(wrongUsernames[i])) {
-                    uniqWrongUsernames.push(wrongUsernames[i]);
-                }
-            }
-            callback(uniqWrongUsernames);
+            wrongMentions = wrongMentions.concat(wrongUsernames);
+            callback(wrongUsernames);
         } else {
             elements.tbody.innerHTML = "";
             elements.checkyDiv.style.display = "none";
@@ -171,7 +184,7 @@ function filterWrongUsernames(usernames, callback) {
 }
 
 /**
- * Inserts the rows associated to wrong mentions in the extension's table.
+ * Inserts the rows associated to new wrong mentions in the extension's table.
  * 
  * @param {string[]} mentions The mentions to include in the rows
  */
@@ -181,7 +194,7 @@ function insertTableRows(mentions) {
     let toInsert = "";
     for(const mention of mentions) {
         toInsert += "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + buttons + "</td></tr>";
-        elements.tbody.innerHTML = toInsert;
     }
+    elements.tbody.insertAdjacentHTML("beforeend", toInsert);
     elements.checkyDiv.style.display = "block";
 }
