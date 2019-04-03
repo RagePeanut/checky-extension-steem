@@ -85,14 +85,16 @@ function resetCheckPostTimeout() {
 function checkPost(post) {
     let matches = post.match(mentionRegex);
     if(matches != null) {
-        // The check handles the case of matches such as "@@mention"
-        console.log(matches);
-        matches = matches.map(mention => mention[0] == "@" ? mention.split("@")[2] : mention.split("@")[1]);
-        console.log(matches);
+        // The first character check handles the case of matches such as "@@mention"
+        matches = matches.map(mention => {
+            const splits = mention.split("@");
+            return splits[2] || splits[1];
+        });
         filterWrongUsernames(matches, insertTableRows)
+    } else {
+        tbody.innerHTML = "";
+        checkyDiv.style.display = "none";
     }
-    tbody.innerHTML = "";
-    checkyDiv.style.display = "none";
 }
 
 /**
