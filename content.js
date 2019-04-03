@@ -50,13 +50,11 @@ function changeRowContent(event) {
                 break;
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
-                td.parentElement.remove();
-                if(!elements.tbody.hasChildNodes()) {
-                    elements.checkyDiv.style.display = "none";
-                }
+                removeTableRow(td.parentElement);
                 break;
             case "change":
                 changeUsername(td.previousElementSibling.innerText, target.previousElementSibling.value);
+                removeTableRow(td.parentElement);
                 break;
             case "back":
                 const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
@@ -66,6 +64,18 @@ function changeRowContent(event) {
             default:
                 console.log("Wrong button name");
         }
+    }
+}
+
+/**
+ * Removes a table row from the DOM.
+ * 
+ * @param {HTMLElement} tr The table row to remove
+ */
+function removeTableRow(tr) {
+    tr.remove();
+    if(!elements.tbody.hasChildNodes()) {
+        elements.checkyDiv.style.display = "none";
     }
 }
 
@@ -101,7 +111,7 @@ function changeUsername(username, newUsername) {
  */
 function resetCheckPostTimeout() {
     clearTimeout(checkPostTimeout);
-    checkPostTimeout = setTimeout(checkPost, 1000, this.value);
+    checkPostTimeout = setTimeout(checkPost, 60000, this.value);
 }
 
 /**
