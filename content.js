@@ -115,7 +115,7 @@ function checkPost(post) {
         // The first character check handles the case of matches such as "@@mention"
         matches = matches.map(mention => {
             const splits = mention.split("@");
-            return splits[2] || splits[1];
+            return (splits[2] || splits[1]).toLowerCase();
         });
         filterWrongUsernames(matches, insertTableRows)
     } else {
@@ -139,7 +139,13 @@ function filterWrongUsernames(usernames, callback) {
         const correctUsernames = resp.filter(user => user != null).map(user => user.name);
         const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username) && !ignored.includes(username));
         if(wrongUsernames.length > 0) {
-            callback(wrongUsernames);
+            const uniqWrongUsernames = [];
+            for(let i = 0; i < wrongUsernames.length; i++) {
+                if(!uniqWrongUsernames.includes(wrongUsernames[i])) {
+                    uniqWrongUsernames.push(wrongUsernames[i]);
+                }
+            }
+            callback(uniqWrongUsernames);
         } else {
             elements.tbody.innerHTML = "";
             elements.checkyDiv.style.display = "none";
