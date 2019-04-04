@@ -1,3 +1,21 @@
+const inserts = {
+    base: "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
+            + "<h6>Possibly wrong mentions</h6>"
+            + "<table>"
+                + "<thead>"
+                    + "<th>Mention</th>"
+                    + "<th>Actions</th>"
+                + "</thead>"
+                + "<tbody></tbody>"
+            + "</table>"
+        + "</div>",
+    buttons: "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
+            + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>",
+    replace: mention => "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + mention + " by here.\" required>"
+                        + "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>"
+                        + "<button name=\"checky__back\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Back</button>",
+    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + inserts.buttons + "</td></tr>"
+}
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
 const elements = {};
@@ -28,17 +46,7 @@ function init() {
  * Inserts the base markups added by the extension to post submission pages.
  */
 function insertMarkups() {
-    const toInsert = "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
-            + "<h6>Possibly wrong mentions</h6>"
-            + "<table>"
-                + "<thead>"
-                    + "<th>Mention</th>"
-                    + "<th>Actions</th>"
-                + "</thead>"
-                + "<tbody></tbody>"
-            + "</table>"
-        + "</div>";
-    document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", toInsert);
+    document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", inserts.base);
 }
 
 /**
@@ -52,10 +60,7 @@ function changeRowContent(event) {
         const td = target.parentElement;
         switch(target.name.split("__")[1]) {
             case "replace":
-                const newContent = "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + td.previousElementSibling.innerText + " by here.\" required>"
-                    + "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>"
-                    + "<button name=\"checky__back\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Back</button>";
-                td.innerHTML = newContent;
+                td.innerHTML = inserts.replace(td.previousElementSibling.innerText);
                 break;
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
@@ -66,9 +71,7 @@ function changeRowContent(event) {
                 removeTableRow(td.parentElement);
                 break;
             case "back":
-                const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
-                    + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
-                td.innerHTML = buttons;
+                td.innerHTML = inserts.buttons;
                 break;
             default:
                 console.log("Wrong button name");
@@ -120,7 +123,7 @@ function changeUsername(username, newUsername) {
  */
 function rescheduleCheckPost() {
     clearTimeout(checkPostTimeout);
-    checkPostTimeout = setTimeout(checkPost, 100, this.value);
+    checkPostTimeout = setTimeout(checkPost, 5000, this.value);
 }
 
 /**
@@ -129,13 +132,13 @@ function rescheduleCheckPost() {
  * @param {string} post The post to check
  */
 function checkPost(post) {
-    let matches = post.match(mentionRegex);
-    if(matches != null) {
-        // The first character check handles the case of matches such as "@@mention"
-        matches = matches.map(mention => {
-            const splits = mention.split("@");
-            return (splits[2] || splits[1]).toLowerCase();
-        });
+    let matches = post.match(mentionRegex) || [];
+    // The first character check handles the case of matches such as "@@mention"
+    matches = matches.map(mention => {
+        const splits = mention.split("@");
+        return (splits[2] || splits[1]).toLowerCase();
+    });
+    if(wrongMentions.length > 0) {
         wrongMentions = wrongMentions.filter(mention => {
             if(!matches.includes(mention)) {
                 removeTableRow(document.getElementById("checky__row-" + mention));
@@ -143,25 +146,22 @@ function checkPost(post) {
             }
             return true;
         });
-        const newMentions = [];
-        for(const mention of matches) {
-            if(!wrongMentions.concat(correctMentions).includes(mention) && !newMentions.includes(mention)) {
-                newMentions.push(mention);
-            }
+    }
+    const newMentions = [];
+    for(const mention of matches) {
+        if(!wrongMentions.concat(correctMentions).includes(mention) && !newMentions.includes(mention)) {
+            newMentions.push(mention);
         }
-        if(newMentions.length > 0) {
-            filterWrongUsernames(newMentions, insertTableRows)
-        }
-    } else {
-        elements.tbody.innerHTML = "";
-        elements.checkyDiv.style.display = "none";
+    }
+    if(newMentions.length > 0) {
+        filterWrongUsernames(newMentions, insertTableRows)
     }
 }
 
 /**
  * Filters the usernames that don't exist on Steem from an array of usernames.
  * 
- * @param {string[]} username The usernames to filter
+ * @param {string[]} usernames The usernames to filter
  * @param {function(string[])} callback A callback taking an array of wrong usernames as its argument
  */
 function filterWrongUsernames(usernames, callback) {
@@ -176,9 +176,6 @@ function filterWrongUsernames(usernames, callback) {
         if(wrongUsernames.length > 0) {
             wrongMentions = wrongMentions.concat(wrongUsernames);
             callback(wrongUsernames);
-        } else {
-            elements.tbody.innerHTML = "";
-            elements.checkyDiv.style.display = "none";
         }
     });
 }
@@ -189,11 +186,9 @@ function filterWrongUsernames(usernames, callback) {
  * @param {string[]} mentions The mentions to include in the rows
  */
 function insertTableRows(mentions) {
-    const buttons = "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
-        + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>";
     let toInsert = "";
     for(const mention of mentions) {
-        toInsert += "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + buttons + "</td></tr>";
+        toInsert += inserts.tr(mention);
     }
     elements.tbody.insertAdjacentHTML("beforeend", toInsert);
     elements.checkyDiv.style.display = "block";
