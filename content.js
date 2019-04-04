@@ -28,7 +28,7 @@ const html = {
         return toReturn;
     },
     suggestionsLoading: "<span>Please wait while the suggestions get generated...</span>",
-    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td style=\"width: 15%\">" + mention + "</td><td>" + html.buttons + "</td></tr>",
+    tr: mention => "<tr id=\"checky__row-" + mention + "\" style=\"height: 70px\"><td style=\"width: 15%\">" + mention + "</td><td>" + html.buttons + "</td></tr>",
     userpic: username => "<img class=\"Userpic\" src=\"https://steemitimages.com/u/" + username + "/avatar\" style=\"margin-right: 1rem\">"
 }
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
