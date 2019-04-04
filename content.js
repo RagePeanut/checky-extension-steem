@@ -1,4 +1,5 @@
 const inserts = {
+    back: "<button name=\"checky__back\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Back</button>",
     base: "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
             + "<h6>Possibly wrong mentions</h6>"
             + "<table>"
@@ -10,10 +11,16 @@ const inserts = {
             + "</table>"
         + "</div>",
     buttons: "<button name=\"checky__replace\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Replace</button>"
+            + "<button name=\"checky__suggestions\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Suggestions</button>"
             + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>",
+    change: "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>",
     replace: mention => "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + mention + " by here.\" required>"
-                        + "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>"
-                        + "<button name=\"checky__back\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Back</button>",
+                        + inserts.change
+                        + inserts.back,
+    suggestions: () => "<select style=\"vertical-align: middle; width: 30%\"><option value=\"ragepeanut\">ragepeanut</option></select>"
+                        + inserts.change
+                        + inserts.back,
+    suggestionsLoading: "<span>Please wait while the suggestions get generated...</span>",
     tr: mention => "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + inserts.buttons + "</td></tr>"
 }
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
@@ -62,6 +69,9 @@ function changeRowContent(event) {
             case "replace":
                 td.innerHTML = inserts.replace(td.previousElementSibling.innerText);
                 break;
+            case "suggestions":
+                td.innerHTML = inserts.suggestions();
+                break;
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
                 removeTableRow(td.parentElement);
@@ -85,6 +95,9 @@ function changeRowContent(event) {
  * @param {HTMLElement} tr The table row to remove
  */
 function removeTableRow(tr) {
+    if(!tr) {
+        return;
+    }
     tr.remove();
     if(!elements.tbody.hasChildNodes()) {
         elements.checkyDiv.style.display = "none";
@@ -123,7 +136,7 @@ function changeUsername(username, newUsername) {
  */
 function rescheduleCheckPost() {
     clearTimeout(checkPostTimeout);
-    checkPostTimeout = setTimeout(checkPost, 5000, this.value);
+    checkPostTimeout = setTimeout(checkPost, 100, this.value);
 }
 
 /**
