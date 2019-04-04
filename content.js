@@ -1,4 +1,4 @@
-const inserts = {
+const html = {
     back: "<button name=\"checky__back\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Back</button>",
     base: "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
             + "<h6>Possibly wrong mentions</h6>"
@@ -14,14 +14,20 @@ const inserts = {
             + "<button name=\"checky__suggestions\" class=\"button\" style=\"margin-bottom: 0; font-size: 1rem\">Suggestions</button>"
             + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>",
     change: "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>",
+    option: (suggestion, disabled) => "<option value=\"" + suggestion + (disabled ? " disabled\">" : "\">") + suggestion + "</option>",
     replace: mention => "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + mention + " by here.\" required>"
-                        + inserts.change
-                        + inserts.back,
-    suggestions: () => "<select style=\"vertical-align: middle; width: 30%\"><option value=\"ragepeanut\">ragepeanut</option></select>"
-                        + inserts.change
-                        + inserts.back,
+                        + html.change
+                        + html.back,
+    suggestions: (options, firstOption) => {
+        let toReturn = "";
+        if(firstOption) toReturn += "<img class=\"Userpic\" src=\"https://steemitimages.com/u/" + firstOption + "/avatar\" style=\"margin-right: 1rem\">";
+        toReturn += "<select style=\"vertical-align: middle; width: 30%\">" + options + "</select>";
+        if(firstOption) toReturn += html.change;
+        toReturn += html.back;
+        return toReturn;
+    },
     suggestionsLoading: "<span>Please wait while the suggestions get generated...</span>",
-    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + inserts.buttons + "</td></tr>"
+    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + html.buttons + "</td></tr>"
 }
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
@@ -53,7 +59,7 @@ function init() {
  * Inserts the base markups added by the extension to post submission pages.
  */
 function insertMarkups() {
-    document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", inserts.base);
+    document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.base);
 }
 
 /**
@@ -67,10 +73,11 @@ function changeRowContent(event) {
         const td = target.parentElement;
         switch(target.name.split("__")[1]) {
             case "replace":
-                td.innerHTML = inserts.replace(td.previousElementSibling.innerText);
+                td.innerHTML = html.replace(td.previousElementSibling.innerText);
                 break;
             case "suggestions":
-                td.innerHTML = inserts.suggestions();
+                td.innerHTML = html.suggestionsLoading;
+                checker.suggestions(td.previousElementSibling.innerText, populateSuggestions, td);
                 break;
             case "ignore":
                 ignoreUsername(td.previousElementSibling.innerText);
@@ -81,11 +88,30 @@ function changeRowContent(event) {
                 removeTableRow(td.parentElement);
                 break;
             case "back":
-                td.innerHTML = inserts.buttons;
+                td.innerHTML = html.buttons;
                 break;
             default:
                 console.log("Wrong button name");
         }
+    }
+}
+
+/**
+ * Populates the suggestions select with valid usernames close to the wrong one.
+ * 
+ * @param {string[]} suggestions The valid usernames
+ * @param {HTMLElement} td The td to insert to suggestions into
+ */
+function populateSuggestions(suggestions, td) {
+    if(suggestions.length > 0) {
+        let options = "";
+        for(const suggestion of suggestions) {
+            options += html.option(suggestion, false);
+        }
+        td.innerHTML = html.suggestions(options, suggestions[0]);
+        td.getElementsByTagName("select")[0].addEventListener("change", changeUserPreview)
+    } else {
+        td.innerHTML = html.suggestions(html.option("No username found", true), null);
     }
 }
 
@@ -102,6 +128,11 @@ function removeTableRow(tr) {
     if(!elements.tbody.hasChildNodes()) {
         elements.checkyDiv.style.display = "none";
     }
+}
+
+function changeUserPreview() {
+    const td = this.parentElement;
+    td.getElementsByClassName("Userpic")[0].src = "https://steemitimages.com/u/" + this.value + "/avatar";
 }
 
 /**
@@ -201,7 +232,7 @@ function filterWrongUsernames(usernames, callback) {
 function insertTableRows(mentions) {
     let toInsert = "";
     for(const mention of mentions) {
-        toInsert += inserts.tr(mention);
+        toInsert += html.tr(mention);
     }
     elements.tbody.insertAdjacentHTML("beforeend", toInsert);
     elements.checkyDiv.style.display = "block";
