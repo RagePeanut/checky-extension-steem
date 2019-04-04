@@ -27,7 +27,7 @@ const html = {
         return toReturn;
     },
     suggestionsLoading: "<span>Please wait while the suggestions get generated...</span>",
-    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td>" + mention + "</td><td>" + html.buttons + "</td></tr>"
+    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td style=\"width: 15%\">" + mention + "</td><td>" + html.buttons + "</td></tr>"
 }
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
