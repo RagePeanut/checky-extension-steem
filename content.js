@@ -15,19 +15,21 @@ const html = {
             + "<button name=\"checky__ignore\" class=\"button hollow no-border\" style=\"margin-bottom: 0\">Ignore</button>",
     change: "<button name=\"checky__change\" class=\"button\" style=\"margin-left: 1rem; margin-bottom: 0; font-size: 1rem\">Change</button>",
     option: (suggestion, disabled) => "<option value=\"" + suggestion + (disabled ? " disabled\">" : "\">") + suggestion + "</option>",
-    replace: mention => "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + mention + " by here.\" required>"
+    replace: mention => html.userpic("null")
+                        + "<input pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" type=\"text\" style=\"display: inline-block; vertical-align: middle; width: 60%\" placeholder=\"Type what you want to replace " + mention + " by here.\" required>"
                         + html.change
                         + html.back,
     suggestions: (options, firstOption) => {
         let toReturn = "";
-        if(firstOption) toReturn += "<img class=\"Userpic\" src=\"https://steemitimages.com/u/" + firstOption + "/avatar\" style=\"margin-right: 1rem\">";
+        if(firstOption) toReturn += html.userpic(firstOption);
         toReturn += "<select style=\"vertical-align: middle; width: 30%\">" + options + "</select>";
         if(firstOption) toReturn += html.change;
         toReturn += html.back;
         return toReturn;
     },
     suggestionsLoading: "<span>Please wait while the suggestions get generated...</span>",
-    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td style=\"width: 15%\">" + mention + "</td><td>" + html.buttons + "</td></tr>"
+    tr: mention => "<tr id=\"checky__row-" + mention + "\"><td style=\"width: 15%\">" + mention + "</td><td>" + html.buttons + "</td></tr>",
+    userpic: username => "<img class=\"Userpic\" src=\"https://steemitimages.com/u/" + username + "/avatar\" style=\"margin-right: 1rem\">"
 }
 const mentionRegex = /(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu; 
 
@@ -47,7 +49,7 @@ chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || [])
  */
 function init() {
     elements.textarea = document.querySelector("textarea");
-    insertMarkups();
+    document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.base);
     elements.textarea.addEventListener("input", rescheduleCheckPost);
     elements.checkyDiv = document.getElementById("checky");
     elements.tbody = elements.checkyDiv.getElementsByTagName("tbody")[0];
@@ -56,10 +58,10 @@ function init() {
 }
 
 /**
- * Inserts the base markups added by the extension to post submission pages.
+ * Sets an image element's src to the default profile picture.
  */
-function insertMarkups() {
-    document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.base);
+function setDefaultImage() {
+    this.src = "https://steemitimages.com/u/null/avatar";
 }
 
 /**
@@ -74,6 +76,8 @@ function changeRowContent(event) {
         switch(target.name.split("__")[1]) {
             case "replace":
                 td.innerHTML = html.replace(td.previousElementSibling.innerText);
+                td.getElementsByTagName("input")[0].addEventListener("input", changeUserPreview);
+                td.getElementsByClassName("Userpic")[0].addEventListener("error", setDefaultImage);
                 break;
             case "suggestions":
                 td.innerHTML = html.suggestionsLoading;
