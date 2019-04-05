@@ -18,10 +18,3 @@ function init(page) {
     wrongMentions = [];
     pageObjects[page].init();
 }
-
-/**
- * Sets an image element's src to the default profile picture.
- */
-function setDefaultImage() {
-    this.src = "https://steemitimages.com/u/null/avatar";
-}

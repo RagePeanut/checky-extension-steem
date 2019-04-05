@@ -12,7 +12,6 @@ const editor = {
                 case "replace":
                     td.innerHTML = html.replace(td.previousElementSibling.innerText);
                     td.getElementsByTagName("input")[0].addEventListener("input", editor.changeUserPreview);
-                    td.getElementsByClassName("Userpic")[0].addEventListener("error", setDefaultImage);
                     break;
                 case "suggestions":
                     td.innerHTML = html.suggestionsLoading;
@@ -123,10 +122,10 @@ const editor = {
      */
     init: () => {
         elements.textarea = document.querySelector("textarea");
-        document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.base);
+        document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.baseEditor);
         elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
-        elements.checkyDiv = document.getElementById("checky");
-        elements.tbody = elements.checkyDiv.getElementsByTagName("tbody")[0];
+        elements.checkyEditor = document.getElementById("checky");
+        elements.tbody = elements.checkyEditor.getElementsByTagName("tbody")[0];
         elements.tbody.addEventListener("click", editor.changeRowContent);
         editor.checkPost(elements.textarea.value);
     },
@@ -141,7 +140,7 @@ const editor = {
             toInsert += html.tr(mention);
         }
         elements.tbody.insertAdjacentHTML("beforeend", toInsert);
-        elements.checkyDiv.style.display = "block";
+        elements.checkyEditor.style.display = "block";
     },
     /**
      * Populates the suggestions select with valid usernames close to the wrong one.
@@ -172,7 +171,7 @@ const editor = {
         }
         tr.remove();
         if(!elements.tbody.hasChildNodes()) {
-            elements.checkyDiv.style.display = "none";
+            elements.checkyEditor.style.display = "none";
         }
     },
     /**
