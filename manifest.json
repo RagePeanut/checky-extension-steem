@@ -6,7 +6,14 @@
     "content_scripts": [
         {
             "matches": ["*://steemit.com/*"],
-            "js": ["lib/steem.min.js", "utils/checker.js", "utils/editor.js", "utils/settings.js", "content.js"]
+            "js": [
+                "lib/steem.min.js",
+                "utils/checker.js",
+                "utils/html.js",
+                "utils/editor.js",
+                "utils/settings.js",
+                "content.js"
+            ]
         }
     ],
     "background": {
