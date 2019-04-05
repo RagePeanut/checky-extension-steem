@@ -1,0 +1,185 @@
+const editor = {
+    /**
+     * Changes the content of the row in which a button has been clicked.
+     * 
+     * @param {MouseEvent} event An event representing the button click
+     */
+    changeRowContent: event => {
+        const target = event.target;
+        if(target.nodeName == "BUTTON") {
+            const td = target.parentElement;
+            switch(target.name.split("__")[1]) {
+                case "replace":
+                    td.innerHTML = html.replace(td.previousElementSibling.innerText);
+                    td.getElementsByTagName("input")[0].addEventListener("input", editor.changeUserPreview);
+                    td.getElementsByClassName("Userpic")[0].addEventListener("error", setDefaultImage);
+                    break;
+                case "suggestions":
+                    td.innerHTML = html.suggestionsLoading;
+                    checker.suggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
+                    break;
+                case "ignore":
+                    editor.ignoreUsername(td.previousElementSibling.innerText);
+                    editor.removeTableRow(td.parentElement);
+                    break;
+                case "change":
+                    editor.changeUsername(td.previousElementSibling.innerText, target.previousElementSibling.value);
+                    editor.removeTableRow(td.parentElement);
+                    break;
+                case "back":
+                    td.innerHTML = html.buttons;
+                    break;
+                default:
+                    console.log("Wrong button name");
+            }
+        }
+    },
+    /**
+     * Changes a user preview based on the value of `this`.
+     */
+    changeUserPreview: event => {
+        event.target.previousElementSibling.src = "https://steemitimages.com/u/" + event.target.value + "/avatar";
+    },
+    /**
+     * Changes all occurences of an username in the textarea by a new username.
+     * 
+     * @param {string} username The username to change
+     * @param {string} newUsername The new username
+     */
+    changeUsername: (username, newUsername) => {
+        if(!/^[a-z][a-z\d.-]{1,}[a-z\d]$/i.test(newUsername)) {
+            return;
+        }
+        const event = new Event("input", { bubbles: true });
+        elements.textarea.value = elements.textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", "gi"), "@" + newUsername);
+        elements.textarea.dispatchEvent(event);
+    },
+    /**
+     * Checks the post's mentions.
+     * 
+     * @param {string} post The post to check
+     */
+    checkPost: post => {
+        let matches = post.match(/(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu) || [];
+        // The first character check handles the case of matches such as "@@mention"
+        matches = matches.map(mention => {
+            const splits = mention.split("@");
+            return (splits[2] || splits[1]).toLowerCase();
+        });
+        if(wrongMentions.length > 0) {
+            wrongMentions = wrongMentions.filter(mention => {
+                if(!matches.includes(mention)) {
+                    editor.removeTableRow(document.getElementById("checky__row-" + mention));
+                    return false;
+                }
+                return true;
+            });
+        }
+        const newMentions = [];
+        for(const mention of matches) {
+            if(!wrongMentions.concat(correctMentions).includes(mention) && !newMentions.includes(mention)) {
+                newMentions.push(mention);
+            }
+        }
+        if(newMentions.length > 0) {
+            editor.filterWrongUsernames(newMentions, editor.insertTableRows)
+        }
+    },
+    checkPostTimeout: 0,
+    /**
+     * Filters the usernames that don't exist on Steem from an array of usernames.
+     * 
+     * @param {string[]} usernames The usernames to filter
+     * @param {function(string[])} callback A callback taking an array of wrong usernames as its argument
+     */
+    filterWrongUsernames: (usernames, callback) => {
+        steem.api.lookupAccountNames(usernames, (err, resp) => {
+            if(err) {
+                console.log(err);
+                return;
+            }
+            const correctUsernames = resp.filter(user => user != null).map(user => user.name);
+            correctMentions = correctMentions.concat(correctUsernames.filter(username => !correctMentions.includes(username)));
+            const wrongUsernames = usernames.filter(username => !correctUsernames.includes(username) && !ignored.includes(username));
+            if(wrongUsernames.length > 0) {
+                wrongMentions = wrongMentions.concat(wrongUsernames);
+                callback(wrongUsernames);
+            }
+        });
+    },
+    /**
+     * Ignores an username forever.
+     * 
+     * @param {string} username The username to ignore
+     */
+    ignoreUsername: username => {
+        if(!ignored.includes(username)) {
+            ignored.push(username);
+            chrome.storage.sync.set({ignored: ignored});
+        }
+    },
+    /**
+     * Initializes the extension editor variables and DOM elements.
+     */
+    init: () => {
+        elements.textarea = document.querySelector("textarea");
+        document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.base);
+        elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
+        elements.checkyDiv = document.getElementById("checky");
+        elements.tbody = elements.checkyDiv.getElementsByTagName("tbody")[0];
+        elements.tbody.addEventListener("click", editor.changeRowContent);
+        editor.checkPost(elements.textarea.value);
+    },
+    /**
+     * Inserts the rows associated to new wrong mentions in the extension's table.
+     * 
+     * @param {string[]} mentions The mentions to include in the rows
+     */
+    insertTableRows: mentions => {
+        let toInsert = "";
+        for(const mention of mentions) {
+            toInsert += html.tr(mention);
+        }
+        elements.tbody.insertAdjacentHTML("beforeend", toInsert);
+        elements.checkyDiv.style.display = "block";
+    },
+    /**
+     * Populates the suggestions select with valid usernames close to the wrong one.
+     * 
+     * @param {string[]} suggestions The valid usernames
+     * @param {HTMLElement} td The td to insert to suggestions into
+     */
+    populateSuggestions: (suggestions, td) => {
+        if(suggestions.length > 0) {
+            let options = "";
+            for(const suggestion of suggestions) {
+                options += html.option(suggestion, false);
+            }
+            td.innerHTML = html.suggestions(options, suggestions[0]);
+            td.getElementsByTagName("select")[0].addEventListener("change", editor.changeUserPreview)
+        } else {
+            td.innerHTML = html.suggestions(html.option("No username found", true), null);
+        }
+    },
+    /**
+     * Removes a table row from the DOM.
+     * 
+     * @param {HTMLElement} tr The table row to remove
+     */
+    removeTableRow: tr => {
+        if(!tr) {
+            return;
+        }
+        tr.remove();
+        if(!elements.tbody.hasChildNodes()) {
+            elements.checkyDiv.style.display = "none";
+        }
+    },
+    /**
+     * Reschedules the check of the post's mentions.
+     */
+    rescheduleCheckPost: event =>  {
+        clearTimeout(editor.checkPostTimeout);
+        editor.checkPostTimeout = setTimeout(editor.checkPost, 100, event.target.value);
+    }
+}
