@@ -166,13 +166,9 @@ const editor = {
      * @param {HTMLElement} tr The table row to remove
      */
     removeTableRow: tr => {
-        if(!tr) {
-            return;
-        }
+        if(!tr) return;
         tr.remove();
-        if(!elements.tbody.hasChildNodes()) {
-            elements.checkyEditor.style.display = "none";
-        }
+        if(!elements.tbody.hasChildNodes()) elements.checkyEditor.style.display = "none";
     },
     /**
      * Reschedules the check of the post's mentions.

@@ -18,7 +18,7 @@ const html = {
                                     + "<div id=\"checky\" class=\"row\">"
                                         + "<div class=\"small-12 medium-6 large-12 columns\">"
                                             + "<label>Ignored usernames</label>"
-                                            + "<form id=\"checky__ignored\">"
+                                            + "<form id=\"checky__ignored\" method=\"post\">"
                                                 + html.ignoredAll(ignored)
                                             + "</form>"
                                         + "</div>"
@@ -41,7 +41,9 @@ const html = {
         }
         if(usernames.length > 0) {
             toReturn += "<button type=\"submit\" class=\"button\">Remove</button>"
-                    + "<button class=\"button\">Remove All</button>";
+                    + "<button id=\"checky__ignored-removeAll\" type=\"button\" class=\"button\">Remove All</button>";
+        } else {
+            toReturn += "<p style=\"margin-top: 1rem\">No ignored usernames.</p>";
         }
         return toReturn;
     },
