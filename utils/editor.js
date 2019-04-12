@@ -122,13 +122,15 @@ const editor = {
      * Initializes the extension editor variables and DOM elements.
      */
     init: app => {
-        editor.app = app;
-        elements.textarea = document.querySelector("textarea");
-        specs.editor.getInsertionLandmark(app).insertAdjacentHTML("beforebegin", html.baseEditor(editor.app));
-        elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
-        elements.checkyEditor = document.getElementById("checky");
-        elements.tbody = elements.checkyEditor.getElementsByTagName("tbody")[0];
-        elements.tbody.addEventListener("click", editor.changeRowContent);
+        if(!elements.checkyEditor) {
+            editor.app = app;
+            elements.textarea = document.querySelector("textarea");
+            specs.editor.getInsertionLandmark(app).insertAdjacentHTML("beforebegin", html.baseEditor(editor.app));
+            elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
+            elements.checkyEditor = document.getElementById("checky");
+            elements.tbody = elements.checkyEditor.getElementsByTagName("tbody")[0];
+            elements.tbody.addEventListener("click", editor.changeRowContent);
+        }
         editor.checkPost(elements.textarea.value);
     },
     /**

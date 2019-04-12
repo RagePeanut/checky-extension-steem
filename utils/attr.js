@@ -25,12 +25,16 @@ const attr = {
                 + "</div>"
         },
         baseSettings: {
-            begin: "<h1><span>Checky Settings</span></h1>"
-                + "<div class=\"Settings\">"
-                    + "<h3><span>Ignored usernames</span></h3>"
-                    + "<p><span>You can remove usernames from the ignored usernames by checking the corresponding boxes and clicking on the Remove button, or remove all the ignored usernames by clicking on the Remove All button.</span></p>"
+            begin: 
+                "<div id=\"checky\">"
+                    + "<h1><span>Checky Settings</span></h1>"
+                    + "<div class=\"Settings\">"
+                        + "<h3><span>Ignored usernames</span></h3>"
+                        + "<p><span>You can remove usernames from the ignored usernames by checking the corresponding boxes and clicking on the Remove button, or remove all the ignored usernames by clicking on the Remove All button.</span></p>"
                         + "<form id=\"checky__ignored\" class=\"Settings__section\" method=\"post\">",
-            end: "</form></div>"
+            end:        "</form>"
+                    + "</div>"
+                + "</div>"
         },
         button: {
             class: "Action Action--primary",
