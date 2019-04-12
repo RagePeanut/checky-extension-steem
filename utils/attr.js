@@ -37,7 +37,7 @@ const attr = {
                 + "</div>"
         },
         button: {
-            class: "Action Action--primary",
+            class: isBig => isBig ? "Action Action--primary Action--big" : "Action Action--primary",
             style: "vertical-align: middle; margin-right: 10px"
         },
         buttonBack: {
@@ -103,7 +103,7 @@ const attr = {
                 + "</div>"
         },
         button: {
-            class: "button",
+            class: _isBig => "button",
             style: "margin-bottom: 0; font-size: 1rem"
         },
         buttonBack: {

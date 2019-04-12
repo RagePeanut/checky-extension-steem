@@ -17,10 +17,10 @@ const html = {
         + html.ignoredAll(ignored, app)
         + attr[app].baseSettings.end,
     buttons: app => 
-        "<button name=\"checky__replace\" class=\"" + attr[app].button.class + "\" style=\"" + attr[app].button.style + "\">Replace</button>"
-        + "<button name=\"checky__suggestions\" class=\"" + attr[app].button.class + "\" style=\"" + attr[app].button.style + "\">Suggestions</button>"
+        "<button name=\"checky__replace\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">Replace</button>"
+        + "<button name=\"checky__suggestions\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">Suggestions</button>"
         + "<button name=\"checky__ignore\" class=\"" + attr[app].buttonBack.class + "\" style=\"" + attr[app].buttonBack.style + "\">Ignore</button>",
-    change: app => "<button name=\"checky__change\" class=\"" + attr[app].button.class + "\" style=\"" + attr[app].button.style + "\">Change</button>",
+    change: app => "<button name=\"checky__change\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">Change</button>",
     ignored: (username, app) => 
         attr[app].checkbox.begin(username)
         + html.userpic(username, app)
@@ -31,8 +31,8 @@ const html = {
             toReturn += html.ignored(username, app);
         }
         if(usernames.length > 0) {
-            toReturn += "<button type=\"submit\" class=\"" + attr[app].button.class + "\" style=\"" + attr[app].button.style + "\">Remove</button>"
-                    + "<button id=\"checky__ignored-removeAll\" type=\"button\" class=\"" + attr[app].button.class + "\" style=\"" + attr[app].button.style + "\">Remove All</button>";
+            toReturn += "<button type=\"submit\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove</button>"
+                    + "<button id=\"checky__ignored-removeAll\" type=\"button\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove All</button>";
         } else {
             toReturn += "<p style=\"margin-top: 1rem\"><span>No ignored usernames.</span></p>";
         }
