@@ -15,7 +15,7 @@ function urlUpdated(tabId, changeInfo, tab) {
         };
         switch(true) {
             case tab.url === "https://steemit.com/submit.html":
-            case /https:\/\/busy.org\/editor/.test(tab.url):
+            case /https:\/\/(staging\.)?busy.org\/editor/.test(tab.url):
                 data.page = "editor";
                 chrome.tabs.sendMessage(tabId, data);
                 break;

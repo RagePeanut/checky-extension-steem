@@ -13,7 +13,8 @@ const specs = {
         getInsertionLandmark: app => {
             switch(app) {
                 case "busy":
-                    return document.getElementsByClassName("Loading")[0];
+                    const settingsElt = document.getElementsByClassName("Settings")[0];
+                    return settingsElt && settingsElt.parentElement;
                 case "steemit":
                     return document.getElementsByClassName("Settings")[0];
             }

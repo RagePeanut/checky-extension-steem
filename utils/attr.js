@@ -27,9 +27,9 @@ const attr = {
         baseSettings: {
             begin: "<h1><span>Checky Settings</span></h1>"
                 + "<div class=\"Settings\">"
-                    + "<form id=\"checky__ignored\" class=\"Settings__section\" method=\"post\">"
-                        + "<h3><span>Ignored usernames</span></h3>"
-                        + "<p><span>You can remove usernames from the ignored usernames by checking the corresponding boxes and clicking on the Remove button, or remove all the ignored usernames by clicking on the Remove All button.</span></p>",
+                    + "<h3><span>Ignored usernames</span></h3>"
+                    + "<p><span>You can remove usernames from the ignored usernames by checking the corresponding boxes and clicking on the Remove button, or remove all the ignored usernames by clicking on the Remove All button.</span></p>"
+                        + "<form id=\"checky__ignored\" class=\"Settings__section\" method=\"post\">",
             end: "</form></div>"
         },
         button: {
@@ -45,12 +45,13 @@ const attr = {
                 "<div id=\"checky__ignored-" + username + "\" class=\"Settings__section__checkbox\">"
                     + "<label class=\"ant-checkbox-wrapper\">"
                         + "<span class=\"ant-checkbox\">"
-                            + "<input type=\"checkbox\" name=\"checky__ignored[]\" class=\"ant-checkbox-input\" value=\"on\">"
+                            + "<input type=\"checkbox\" name=\"checky__ignored[]\" value=\"" + username + "\" class=\"ant-checkbox-input\" onchange=\"this.checked ? this.parentElement.classList.add('ant-checkbox-checked') : this.parentElement.classList.remove('ant-checkbox-checked')\">"
                             + "<span class=\"ant-checkbox-inner\"></span>"
                         + "</span>"
                         + "<span>",
-            end: username => 
-                        username + "</span>"
+            end: username =>
+                        "</span>"
+                        + "<span>" + username + "</span>"
                     + "</label>"
                 + "</div>"
         },

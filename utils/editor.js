@@ -177,6 +177,6 @@ const editor = {
      */
     rescheduleCheckPost: event =>  {
         clearTimeout(editor.checkPostTimeout);
-        editor.checkPostTimeout = setTimeout(editor.checkPost, 100, event.target.value);
+        editor.checkPostTimeout = setTimeout(editor.checkPost, 1000, event.target.value);
     }
 }
