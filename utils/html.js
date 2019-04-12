@@ -34,10 +34,11 @@ const html = {
             toReturn += "<button type=\"submit\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove</button>"
                     + "<button id=\"checky__ignored-removeAll\" type=\"button\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove All</button>";
         } else {
-            toReturn += "<p style=\"margin-top: 1rem\"><span>No ignored usernames.</span></p>";
+            toReturn += html.noIgnored;
         }
         return toReturn;
     },
+    noIgnored: "<p style=\"margin-top: 1rem\"><span>No ignored usernames.</span></p>",
     option: (suggestion, disabled) => "<option value=\"" + suggestion + (disabled ? " disabled\">" : "\">") + suggestion + "</option>",
     replace: app => 
         html.userpic("null", app)

@@ -7,13 +7,15 @@ const settings = {
      */
     removeIgnored: event => {
         event.preventDefault();
-        const inputs = event.target.elements["checky__ignored[]"];
+        let inputs = event.target.elements["checky__ignored[]"];
+        if(!inputs.length) inputs = [inputs];
         for(let i = inputs.length - 1; i >= 0; i--) {
             if(inputs[i].checked) {
                 ignored = ignored.filter(username => username !== inputs[i].value);
                 document.getElementById("checky__ignored-" + inputs[i].value).remove();
             }
         }
+        if(ignored.length === 0) elements.checkyIgnoredForm.innerHTML = html.noIgnored;
         chrome.storage.sync.set({ignored: ignored});
     },
     /**
