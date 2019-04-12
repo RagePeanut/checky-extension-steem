@@ -119,7 +119,7 @@ const attr = {
                 + "</label>"
         },
         select: {
-            style: "margin: 0 10px"
+            style: "margin: 0 1rem"
         },
         tbody: {
             class: ""
