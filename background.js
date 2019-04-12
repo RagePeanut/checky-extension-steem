@@ -8,10 +8,11 @@ chrome.tabs.onUpdated.addListener(urlUpdated);
  * @param {object} tab The state of the tab that was updated.
  */
 function urlUpdated(tabId, changeInfo, tab) {
-    if(tab.status == "complete" && !changeInfo.favIconUrl) {
-        if(tab.url == "https://steemit.com/submit.html" && tab.title == "Create a post — Steemit") {
+    console.log(changeInfo, tab);
+    if(changeInfo.status === "complete") {
+        if(tab.url == "https://steemit.com/submit.html") {
             chrome.tabs.sendMessage(tabId, "editor");
-        } else if(/https:\/\/steemit\.com\/@[a-z\d.-]{3,16}\/settings/.test(tab.url) && /.* \(@[a-z\d.-]{3,16}\) — Steemit/.test(tab.title)) {
+        } else if(/https:\/\/steemit\.com\/@[a-z\d.-]{3,16}\/settings/.test(tab.url)) {
             chrome.tabs.sendMessage(tabId, "settings");
         }
     }
