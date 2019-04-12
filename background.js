@@ -10,10 +10,19 @@ chrome.tabs.onUpdated.addListener(urlUpdated);
 function urlUpdated(tabId, changeInfo, tab) {
     console.log(changeInfo, tab);
     if(changeInfo.status === "complete") {
-        if(tab.url == "https://steemit.com/submit.html") {
-            chrome.tabs.sendMessage(tabId, "editor");
-        } else if(/https:\/\/steemit\.com\/@[a-z\d.-]{3,16}\/settings/.test(tab.url)) {
-            chrome.tabs.sendMessage(tabId, "settings");
+        const data = {
+            app: tab.url.match(/\/\/(?:staging\.)?([a-z]+)/)[1]
+        };
+        switch(true) {
+            case tab.url === "https://steemit.com/submit.html":
+            case /https:\/\/busy.org\/editor/.test(tab.url):
+                data.page = "editor";
+                chrome.tabs.sendMessage(tabId, data);
+                break;
+            case /\/settings$/.test(tab.url):
+                data.page = "settings";
+                chrome.tabs.sendMessage(tabId, data);
+                break;
         }
     }
 }

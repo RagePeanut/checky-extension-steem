@@ -1,4 +1,5 @@
 const editor = {
+    app: null,
     /**
      * Changes the content of the row in which a button has been clicked.
      * 
@@ -10,7 +11,7 @@ const editor = {
             const td = target.parentElement;
             switch(target.name.split("__")[1]) {
                 case "replace":
-                    td.innerHTML = html.replace(td.previousElementSibling.innerText);
+                    td.innerHTML = html.replace(editor.app);
                     td.getElementsByTagName("input")[0].addEventListener("input", editor.changeUserPreview);
                     break;
                 case "suggestions":
@@ -26,7 +27,7 @@ const editor = {
                     editor.removeTableRow(td.parentElement);
                     break;
                 case "back":
-                    td.innerHTML = html.buttons;
+                    td.innerHTML = html.buttons(editor.app);
                     break;
                 default:
                     console.log("Wrong button name");
@@ -120,9 +121,10 @@ const editor = {
     /**
      * Initializes the extension editor variables and DOM elements.
      */
-    init: () => {
+    init: app => {
+        editor.app = app;
         elements.textarea = document.querySelector("textarea");
-        document.getElementsByClassName("vframe")[0].lastElementChild.previousElementSibling.insertAdjacentHTML("beforebegin", html.baseEditor);
+        specs.editor.getInsertionLandmark(app).insertAdjacentHTML("beforebegin", html.baseEditor(editor.app));
         elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
         elements.checkyEditor = document.getElementById("checky");
         elements.tbody = elements.checkyEditor.getElementsByTagName("tbody")[0];
@@ -137,7 +139,7 @@ const editor = {
     insertTableRows: mentions => {
         let toInsert = "";
         for(const mention of mentions) {
-            toInsert += html.tr(mention);
+            toInsert += html.tr(mention, editor.app);
         }
         elements.tbody.insertAdjacentHTML("beforeend", toInsert);
         elements.checkyEditor.style.display = "block";
@@ -154,10 +156,10 @@ const editor = {
             for(const suggestion of suggestions) {
                 options += html.option(suggestion, false);
             }
-            td.innerHTML = html.suggestions(options, suggestions[0]);
+            td.innerHTML = html.suggestions(options, suggestions[0], editor.app);
             td.getElementsByTagName("select")[0].addEventListener("change", editor.changeUserPreview)
         } else {
-            td.innerHTML = html.suggestions(html.option("No username found", true), null);
+            td.innerHTML = html.suggestions(html.option("No username found", true), null, editor.app);
         }
     },
     /**

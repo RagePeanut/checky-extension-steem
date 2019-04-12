@@ -1,4 +1,5 @@
 const settings = {
+    app: null,
     /**
      * Removes the checked ignored usernames.
      * 
@@ -21,14 +22,15 @@ const settings = {
     removeAllIgnored: () => {
         ignored = [];
         chrome.storage.sync.set({ignored: ignored});
-        elements.checkyIgnoredForm.innerHTML = html.ignoredAll(ignored);
+        elements.checkyIgnoredForm.innerHTML = html.ignoredAll(ignored, editor.app);
     },
     /**
      * Initializes the extension settings variables and DOM elements.
      */
-    init: () => {
-        const baseSettings = html.baseSettings(ignored.sort());
-        document.getElementsByClassName("Settings")[0].insertAdjacentHTML("beforeend", baseSettings);
+    init: app => {
+        editor.app = app;
+        const baseSettings = html.baseSettings(ignored.sort(), app);
+        specs.settings.getInsertionLandmark(app).insertAdjacentHTML("beforeend", baseSettings);
         elements.checkySettings = document.getElementById("checky");
         elements.checkyIgnoredForm = document.getElementById("checky__ignored");
         elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);

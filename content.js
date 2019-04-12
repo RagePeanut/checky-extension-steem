@@ -13,8 +13,8 @@ chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || [])
 
 chrome.runtime.onMessage.addListener(init);
 
-function init(page) {
+function init(data) {
     elements = {};
     wrongMentions = [];
-    pageObjects[page].init();
+    pageObjects[data.page].init(data.app);
 }
