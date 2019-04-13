@@ -60,6 +60,7 @@ const attr = {
                 + "</div>"
         },
         select: {
+            class: "",
             style: "margin: 0 10px"
         },
         tbody: {
@@ -119,6 +120,7 @@ const attr = {
                 + "</label>"
         },
         select: {
+            class: "",
             style: "margin: 0 1rem"
         },
         tbody: {
@@ -137,6 +139,62 @@ const attr = {
         userpic: {
             class: "Userpic",
             style: ""
+        }
+    },
+    steempeak: {
+        baseEditor: {
+            begin: 
+                "<div id=\"checky\" class=\"panel-body\" style=\"display: none; border-top: 0\">"
+                    + "<div class=\"form-group\">"
+                        + "<label class=\"text-semibold\">Possibly wrong mentions</label>"
+                        + "<div class=\"table-responsive\">",
+            end: "</div></div></div>"
+        },
+        baseSettings: {
+            begin: "",
+            end: ""
+        },
+        button: {
+            class: _isBig => "btn btn-sm btn-primary mr-10",
+            style: ""
+        },
+        buttonBack: {
+            class: "btn btn-sm",
+            style: ""
+        },
+        checkbox: {
+            begin: username =>
+                "<label id=\"checky__ignored-" + username + "\" style=\"padding: 12px 20px\">"
+                    + "<div class=\"p-default p-fill p-smooth p-bigger pretty\">"
+                        + "<input type=\"checkbox\" value=\"" + username + "\" name=\"checky__ignored[]\" style=\"vertical-align: middle\">"
+                        + "<div class=\"state p-info\">"
+                            + "<label></label>"
+                        + "</div>",
+            end: username => 
+                        username
+                    + "</div>"
+                + "</label>"
+        },
+        select: {
+            class: "form-control mr-10 ml-10",
+            style: "display: inline-block"
+        },
+        tbody: {
+            class: ""
+        },
+        textInput: {
+            class: "form-control mr-10 ml-10",
+            style: ""
+        },
+        thead: {
+            class: ""
+        },
+        tr: {
+            style: ""
+        },
+        userpic: {
+            class: "avatar",
+            style: "min-width: 40px; width: 40px; height: 40px"
         }
     }
 }

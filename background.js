@@ -14,11 +14,12 @@ function urlUpdated(tabId, changeInfo, tab) {
         };
         switch(true) {
             case tab.url === "https://steemit.com/submit.html":
+            case tab.url === "https://steempeak.com/publish":
             case /https:\/\/(staging\.)?busy.org\/editor/.test(tab.url):
                 data.page = "editor";
                 chrome.tabs.sendMessage(tabId, data);
                 break;
-            case /\/settings$/.test(tab.url):
+            case /\/settings(\/|$)/.test(tab.url):
                 data.page = "settings";
                 chrome.tabs.sendMessage(tabId, data);
                 break;

@@ -15,9 +15,13 @@ async function suggestions(username, callback, arg) {
     const ed = [...edits(username)];
     const existing = [];
     for(let i = 0; i < ed.length; i += 10000) {
-        const lookedUp = await steem.api.lookupAccountNamesAsync(ed.slice(i, i + 10000))
-        for(let j = 0; j < lookedUp.length; j++) {
-            if(lookedUp[j] != null) existing.push(lookedUp[j].name);
+        try {
+            const lookedUp = await steem.api.lookupAccountNamesAsync(ed.slice(i, i + 10000))
+            for(let j = 0; j < lookedUp.length; j++) {
+                if(lookedUp[j] != null) existing.push(lookedUp[j].name);
+            }
+        } catch(e) {
+            i -= 10000; 
         }
     }
     callback(existing, arg);

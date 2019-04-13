@@ -2,7 +2,7 @@ const html = {
     back: app => "<button name=\"checky__back\" class=\"" + attr[app].buttonBack.class + "\" style=\"" + attr[app].buttonBack.style + "\">Back</button>",
     baseEditor: app => 
         attr[app].baseEditor.begin
-        + "<table style=\"width: 100%\">"
+        + "<table style=\"width: 100%\" class=\"table table-striped\">"
             + "<thead class=\"" + attr[app].thead.class + "\">"
                 + "<tr>"
                     + "<th><span>Mention</span></th>"
@@ -49,7 +49,7 @@ const html = {
     suggestions: (options, firstOption, app) => {
         let toReturn = "";
         if(firstOption) toReturn += html.userpic(firstOption, app);
-        toReturn += "<select style=\"vertical-align: middle; width: 30%; " + attr[app].select.style + "\">" + options + "</select>";
+        toReturn += "<select class=\"" + attr[app].select.class + "\" style=\"vertical-align: middle; width: 30%; " + attr[app].select.style + "\">" + options + "</select>";
         if(firstOption) toReturn += html.change(app);
         toReturn += html.back(app);
         return toReturn;

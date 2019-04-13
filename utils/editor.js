@@ -125,7 +125,7 @@ const editor = {
         if(!elements.checkyEditor) {
             editor.app = app;
             elements.textarea = document.querySelector("textarea");
-            specs.editor.getInsertionLandmark(app).insertAdjacentHTML("beforebegin", html.baseEditor(editor.app));
+            specs.editor.getInsertionLandmark(app).insertAdjacentHTML("beforebegin", html.baseEditor(app));
             elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
             elements.checkyEditor = document.getElementById("checky");
             elements.tbody = elements.checkyEditor.getElementsByTagName("tbody")[0];
