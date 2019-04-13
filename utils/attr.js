@@ -59,9 +59,15 @@ const attr = {
                     + "</label>"
                 + "</div>"
         },
+        removeButtons: {
+            class: ""
+        },
         select: {
             class: "",
             style: "margin: 0 10px"
+        },
+        table: {
+            class: ""
         },
         tbody: {
             class: "ant-table-tbody"
@@ -119,9 +125,15 @@ const attr = {
                     "<span style=\"margin-left: 0.5rem; font-size: 1rem\">" + username + "</span>"
                 + "</label>"
         },
+        removeButtons: {
+            class: ""
+        },
         select: {
             class: "",
             style: "margin: 0 1rem"
+        },
+        table: {
+            class: ""
         },
         tbody: {
             class: ""
@@ -151,8 +163,25 @@ const attr = {
             end: "</div></div></div>"
         },
         baseSettings: {
-            begin: "",
-            end: ""
+            begin: 
+                "<div class=\"panel panel-flat\">"
+                    + "<div class=\"panel-body no-padding-top\">"
+                        + "<table class=\"table tasks-list table-lg\">"
+                            + "<tbody>"
+                                + "<tr>"
+                                    + "<td class=\"no-border-top no-padding-bottom\">"
+                                        + "<div class=\"text-semibold\">"
+                                            + "<h5>Checky ignored usernames</h5>"
+                                        + "</div>"
+                                        + "<div class=\"text-muted pb-10\">Check the ignored usernames you want to remove from the list.</div>"
+                                        + "<form id=\"checky__ignored\" method=\"post\">",
+            end:                        "</form>"
+                                    + "</td>"
+                                + "</tr>"
+                            + "</tbody>"
+                        + "</table>"
+                    + "</div>"
+                + "</div>"
         },
         button: {
             class: _isBig => "btn btn-sm btn-primary mr-10",
@@ -164,20 +193,26 @@ const attr = {
         },
         checkbox: {
             begin: username =>
-                "<label id=\"checky__ignored-" + username + "\" style=\"padding: 12px 20px\">"
+                "<label id=\"checky__ignored-" + username + "\" style=\"display: block\">"
                     + "<div class=\"p-default p-fill p-smooth p-bigger pretty\">"
                         + "<input type=\"checkbox\" value=\"" + username + "\" name=\"checky__ignored[]\" style=\"vertical-align: middle\">"
                         + "<div class=\"state p-info\">"
                             + "<label></label>"
-                        + "</div>",
+                        + "</div>"
+                    + "</div>",
             end: username => 
-                        username
-                    + "</div>"
+                    "<span class=\"ml-10\">" + username + "</span>"
                 + "</label>"
+        },
+        removeButtons: {
+            class: "text-center"
         },
         select: {
             class: "form-control mr-10 ml-10",
             style: "display: inline-block"
+        },
+        table: {
+            class: "table table-striped"
         },
         tbody: {
             class: ""

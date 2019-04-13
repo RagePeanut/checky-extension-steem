@@ -19,6 +19,8 @@ const specs = {
                     return settingsElt && settingsElt.parentElement;
                 case "steemit":
                     return document.getElementsByClassName("Settings")[0];
+                case "steempeak":
+                    return document.getElementsByClassName("panel")[0].parentElement;
             }
         }
     }

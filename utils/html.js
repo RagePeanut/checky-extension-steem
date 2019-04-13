@@ -2,7 +2,7 @@ const html = {
     back: app => "<button name=\"checky__back\" class=\"" + attr[app].buttonBack.class + "\" style=\"" + attr[app].buttonBack.style + "\">Back</button>",
     baseEditor: app => 
         attr[app].baseEditor.begin
-        + "<table style=\"width: 100%\" class=\"table table-striped\">"
+        + "<table style=\"width: 100%\" class=\"" + attr[app].table.class + "\">"
             + "<thead class=\"" + attr[app].thead.class + "\">"
                 + "<tr>"
                     + "<th><span>Mention</span></th>"
@@ -31,8 +31,10 @@ const html = {
             toReturn += html.ignored(username, app);
         }
         if(usernames.length > 0) {
-            toReturn += "<button type=\"submit\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove</button>"
-                    + "<button id=\"checky__ignored-removeAll\" type=\"button\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove All</button>";
+            toReturn += "<div class=\"" + attr[app].removeButtons.class +"\">"
+                        + "<button type=\"submit\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove</button>"
+                        + "<button id=\"checky__ignored-removeAll\" type=\"button\" class=\"" + attr[app].button.class(true) + "\" style=\"" + attr[app].button.style + "\">Remove All</button>"
+                    + "</div>";
         } else {
             toReturn += html.noIgnored;
         }
