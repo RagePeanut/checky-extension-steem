@@ -57,7 +57,7 @@ const html = {
         toReturn += html.back(app);
         return toReturn;
     },
-    suggestionsLoading: "<span>Please wait while the suggestions get generated...</span>",
+    suggestionsLoading: dots => "<span>Please wait while the suggestions get generated" + ".".repeat(dots) + "</span>",
     tr: (mention, app) => "<tr id=\"checky__row-" + mention + "\" style=\"" + attr[app].tr.style + "\"><td style=\"width: 15%\">" + mention + "</td><td>" + html.buttons(app) + "</td></tr>",
     userpic: (username, app) => "<img src=\"https://steemitimages.com/u/" + username + "/avatar\" class=\"" + attr[app].userpic.class + "\" style=\"" + attr[app].userpic.style +"\" onerror=\"this.src='https://steemitimages.com/u/null/avatar'\">"
 }

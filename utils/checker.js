@@ -23,9 +23,10 @@ async function suggestions(username, callback, arg) {
  * 
  * @param {string} username The wrong username
  * @param {function} callback A function to call once all the suggestions have been found
+ * @param {number} intervalHandle An interval to clear once the suggestions have been generated
  * @param {*} arg An optional argument for the callback
  */
-async function moreSuggestions(username, callback, arg) {
+async function moreSuggestions(username, callback, intervalHandle, arg) {
     const ed1 = [...edits(username, false)];
     const set = new Set();
     ed1.forEach(edit => {
@@ -33,6 +34,7 @@ async function moreSuggestions(username, callback, arg) {
     });
     const ed2 = [...set];
     const ex = await existing(ed2);
+    clearInterval(intervalHandle);
     callback(ex, arg, false);
 }
 

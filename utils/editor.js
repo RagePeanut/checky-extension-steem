@@ -15,12 +15,17 @@ const editor = {
                     td.getElementsByTagName("input")[0].addEventListener("input", editor.changeUserPreview);
                     break;
                 case "suggestions":
-                    td.innerHTML = html.suggestionsLoading;
+                    td.innerHTML = html.suggestionsLoading(3);
                     checker.suggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
                     break;
                 case "more-suggestions":
-                    td.innerHTML = html.suggestionsLoading;
-                    checker.moreSuggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
+                    let dotCount = 3;
+                    td.innerHTML = html.suggestionsLoading(dotCount);
+                    const intervalHandle = setInterval(() => {
+                        if(++dotCount == 4) dotCount = 1;
+                        td.innerHTML = html.suggestionsLoading(dotCount);
+                    }, 800);
+                    checker.moreSuggestions(td.previousElementSibling.innerText, editor.populateSuggestions, intervalHandle, td);
                     break;
                 case "ignore":
                     editor.ignoreUsername(td.previousElementSibling.innerText);
