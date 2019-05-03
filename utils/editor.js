@@ -164,6 +164,19 @@ const editor = {
      */
     populateSuggestions: (suggestions, td, isFirstSuggestions) => {
         if(suggestions.length > 0) {
+            // Sorting the suggestions alphabetically and putting the suggestions with the same first character
+            // as the wrong mention in first
+            const wrongMentionStart = td.previousElementSibling.innerText[0];
+            suggestions = suggestions.sort((a, b) => {
+                if(wrongMentionStart === a[0]) {
+                    if(wrongMentionStart !== b[0]) {
+                        return -1;
+                    }
+                } else if(wrongMentionStart === b[0]) {
+                    return 1;
+                }
+                return a.localeCompare(b);
+            });
             let options = "";
             for(const suggestion of suggestions) {
                 options += html.option(suggestion, false);
