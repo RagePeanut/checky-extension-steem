@@ -19,6 +19,7 @@ const editor = {
                     checker.suggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
                     break;
                 case "more-suggestions":
+                    td.innerHTML = html.suggestionsLoading;
                     checker.moreSuggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
                     break;
                 case "ignore":
