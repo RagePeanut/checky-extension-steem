@@ -130,11 +130,11 @@ const editor = {
     /**
      * Initializes the extension editor variables and DOM elements.
      */
-    init: app => {
+    init: async app => {
         if(!elements.checkyEditor) {
             editor.app = app;
+            (await specs.editor.getInsertionLandmark(app)).insertAdjacentHTML("beforebegin", html.baseEditor(app));
             elements.textarea = document.querySelector("textarea");
-            specs.editor.getInsertionLandmark(app).insertAdjacentHTML("beforebegin", html.baseEditor(app));
             elements.textarea.addEventListener("input", editor.rescheduleCheckPost);
             elements.checkyEditor = document.getElementById("checky");
             elements.tbody = elements.checkyEditor.getElementsByTagName("tbody")[0];

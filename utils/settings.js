@@ -29,13 +29,13 @@ const settings = {
     /**
      * Initializes the extension settings variables and DOM elements.
      */
-    init: app => {
+    init: async app => {
         if(!elements.checkySettings) {
             const insertionLandmark = specs.settings.getInsertionLandmark(app);
             if(insertionLandmark) {
                 editor.app = app;
                 const baseSettings = html.baseSettings(ignored.sort(), app);
-                specs.settings.getInsertionLandmark(app).insertAdjacentHTML("beforeend", baseSettings);
+                (await specs.settings.getInsertionLandmark(app)).insertAdjacentHTML("beforeend", baseSettings);
                 elements.checkySettings = document.getElementById("checky");
                 elements.checkyIgnoredForm = document.getElementById("checky__ignored");
                 elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
