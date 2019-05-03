@@ -64,7 +64,7 @@ const attr = {
         },
         select: {
             class: "",
-            style: "margin: 0 10px"
+            style: isFirstChild => isFirstChild ? "margin-right: 10px" : "margin: 0 10px"
         },
         table: {
             class: ""
@@ -130,7 +130,7 @@ const attr = {
         },
         select: {
             class: "",
-            style: "margin: 0 1rem"
+            style: isFirstChild => isFirstChild ? "margin-right: 1rem" : "margin: 0 1rem"
         },
         table: {
             class: ""
@@ -209,7 +209,7 @@ const attr = {
         },
         select: {
             class: "form-control mr-10 ml-10",
-            style: "display: inline-block"
+            style: _isFirstChild => "display: inline-block"
         },
         table: {
             class: "table table-striped"

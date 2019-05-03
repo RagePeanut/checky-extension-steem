@@ -51,7 +51,7 @@ const html = {
     suggestions: (options, firstOption, app, isFirstSuggestions) => {
         let toReturn = "";
         if(firstOption) toReturn += html.userpic(firstOption, app);
-        toReturn += "<select class=\"" + attr[app].select.class + "\" style=\"vertical-align: middle; width: 30%; " + attr[app].select.style + "\">" + options + "</select>";
+        toReturn += "<select class=\"" + attr[app].select.class + "\" style=\"vertical-align: middle; width: 30%; " + attr[app].select.style(!firstOption) + "\">" + options + "</select>";
         if(firstOption) toReturn += html.change(app);
         if(isFirstSuggestions) toReturn += "<button name=\"check__more-suggestions\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">More Suggestions</button>";
         toReturn += html.back(app);
