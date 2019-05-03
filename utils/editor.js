@@ -18,6 +18,9 @@ const editor = {
                     td.innerHTML = html.suggestionsLoading;
                     checker.suggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
                     break;
+                case "more-suggestions":
+                    checker.moreSuggestions(td.previousElementSibling.innerText, editor.populateSuggestions, td);
+                    break;
                 case "ignore":
                     editor.ignoreUsername(td.previousElementSibling.innerText);
                     editor.removeTableRow(td.parentElement);
@@ -151,17 +154,18 @@ const editor = {
      * 
      * @param {string[]} suggestions The valid usernames
      * @param {HTMLElement} td The td to insert to suggestions into
+     * @param {boolean} isFirstSuggestions Whether or not the suggestions are one edit away only
      */
-    populateSuggestions: (suggestions, td) => {
+    populateSuggestions: (suggestions, td, isFirstSuggestions) => {
         if(suggestions.length > 0) {
             let options = "";
             for(const suggestion of suggestions) {
                 options += html.option(suggestion, false);
             }
-            td.innerHTML = html.suggestions(options, suggestions[0], editor.app);
+            td.innerHTML = html.suggestions(options, suggestions[0], editor.app, isFirstSuggestions);
             td.getElementsByTagName("select")[0].addEventListener("change", editor.changeUserPreview)
         } else {
-            td.innerHTML = html.suggestions(html.option("No username found", true), null, editor.app);
+            td.innerHTML = html.suggestions(html.option("No username found", true), null, editor.app, isFirstSuggestions);
         }
     },
     /**
