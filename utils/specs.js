@@ -20,8 +20,12 @@ const specs = {
         getInsertionLandmark: async app => {
             switch(app) {
                 case "busy":
-                    const settingsElt = document.getElementsByClassName("Settings")[0];
-                    return settingsElt && settingsElt.parentElement;
+                    let settingsElt;
+                    while(!settingsElt) {
+                        await sleep(100);
+                        settingsElt = document.getElementsByClassName("Settings")[0];
+                    }
+                    return settingsElt.parentElement;
                 case "steemit":
                     return document.getElementsByClassName("Settings")[0];
                 case "steempeak":

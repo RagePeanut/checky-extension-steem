@@ -31,19 +31,14 @@ const settings = {
      */
     init: async app => {
         if(!elements.checkySettings) {
-            const insertionLandmark = specs.settings.getInsertionLandmark(app);
-            if(insertionLandmark) {
-                editor.app = app;
-                const baseSettings = html.baseSettings(ignored.sort(), app);
-                (await specs.settings.getInsertionLandmark(app)).insertAdjacentHTML("beforeend", baseSettings);
-                elements.checkySettings = document.getElementById("checky");
-                elements.checkyIgnoredForm = document.getElementById("checky__ignored");
-                elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
-                elements.checkyIgnoredFormRemoveAll = document.getElementById("checky__ignored-removeAll");
-                if(elements.checkyIgnoredFormRemoveAll) elements.checkyIgnoredFormRemoveAll.addEventListener("click", settings.removeAllIgnored);
-            } else {
-                setTimeout(settings.init, 100, app);
-            }
+            editor.app = app;
+            const baseSettings = html.baseSettings(ignored.sort(), app);
+            (await specs.settings.getInsertionLandmark(app)).insertAdjacentHTML("beforeend", baseSettings);
+            elements.checkySettings = document.getElementById("checky");
+            elements.checkyIgnoredForm = document.getElementById("checky__ignored");
+            elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
+            elements.checkyIgnoredFormRemoveAll = document.getElementById("checky__ignored-removeAll");
+            if(elements.checkyIgnoredFormRemoveAll) elements.checkyIgnoredFormRemoveAll.addEventListener("click", settings.removeAllIgnored);
         }
     }
 }
