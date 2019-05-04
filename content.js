@@ -19,9 +19,10 @@ function init(data) {
         elements = {};
         wrongMentions = [];
     } else {
-        elements = currentPage === data.page ? elements : {};
+        elements = currentPage === data.page || currentPage === "settings" && data.page === "menu" || currentPage === "menu" && data.page === "settings" ? elements : {};
         wrongMentions = currentPage === data.page ? wrongMentions : [];
-        pageObjects[data.page].init(data.app);
+        const page = data.page === "menu" ? "settings" : data.page;
+        pageObjects[page].init(data.app, data.path, data.page === "settings");
     }
     currentPage = data.page;
 }

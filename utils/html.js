@@ -48,6 +48,12 @@ const html = {
             + attr[app].textInput.class + "\" style=\"display: inline-block; vertical-align: middle; width: 60%; " + attr[app].textInput.style + "\" required>"
         + html.change(app)
         + html.back(app),
+    settingsLink: (app, isActive) => 
+        "<li id=\"checky__link\" class=\"" + (isActive ? attr[app].settingsLink.liClassActive : "") + "\">"
+            + "<a href=\"#checky-settings\" class=\"" + (isActive ? attr[app].settingsLink.aClassActive : "") + "\">"
+                + attr[app].settingsLink.icon + "Checky"
+            + "</a>"
+        + "</li>",
     suggestions: (options, firstOption, app, isFirstSuggestions) => {
         let toReturn = "";
         if(firstOption) toReturn += html.userpic(firstOption, app);

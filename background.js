@@ -10,7 +10,8 @@ chrome.tabs.onUpdated.addListener(urlUpdated);
 function urlUpdated(tabId, changeInfo, tab) {
     if(changeInfo.status === "complete") {
         const data = {
-            app: tab.url.match(/\/\/(?:staging\.)?([a-z]+)/)[1]
+            app: tab.url.match(/\/\/(?:staging\.)?([a-z]+)/)[1],
+            path: (new URL(tab.url)).pathname
         };
         switch(true) {
             case tab.url === "https://steemit.com/submit.html":
@@ -19,8 +20,10 @@ function urlUpdated(tabId, changeInfo, tab) {
                 data.page = "editor";
                 chrome.tabs.sendMessage(tabId, data);
                 break;
-            case /\/settings(\/|$)/.test(tab.url):
+            case /#checky-settings/.test(tab.url):
                 data.page = "settings";
+            case /\/@[a-z\d.-]+/.test(tab.url):
+                if(!data.page) data.page = "menu";
                 chrome.tabs.sendMessage(tabId, data);
                 break;
             default:

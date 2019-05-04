@@ -16,6 +16,16 @@ const specs = {
             }
         }
     },
+    menu: {
+        getInsertionLandmarkAndMenu: async app => {
+            switch(app) {
+                case "steemit":
+                    const linkLandmark = document.querySelector(".UserProfile__top-menu > .columns.shrink > ul");
+                    const appMenu = document.getElementsByClassName("UserProfile__top-menu")[0];
+                    return {linkLandmark, appMenu};
+            }
+        }
+    },
     settings: {
         getInsertionLandmark: async app => {
             switch(app) {
@@ -27,7 +37,7 @@ const specs = {
                     }
                     return settingsElt.parentElement;
                 case "steemit":
-                    return document.getElementsByClassName("Settings")[0];
+                    return document.getElementsByClassName("UserProfile__tab_content")[0];
                 case "steempeak":
                     let panel;
                     while(!panel) {

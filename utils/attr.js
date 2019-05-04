@@ -66,6 +66,11 @@ const attr = {
             class: "",
             style: isFirstChild => isFirstChild ? "margin-right: 10px" : "margin: 0 10px"
         },
+        settingsLink: {
+            aClassActive: "Sidenav__item--active",
+            icon: "<i class=\"iconfont icon-setup\"></i>",
+            liClassActive: ""
+        },
         table: {
             class: ""
         },
@@ -94,20 +99,43 @@ const attr = {
             end: "</div>"
         },
         baseSettings: {
-            begin: "<div class=\"row\">"
-                    + "<div class=\"small-12 medium-6 large-4 columns\">"
-                        + "<br>"
-                        + "<br>"
-                        + "<h4>Checky Preferences</h4>"
-                        + "<div id=\"checky\" class=\"row\">"
-                            + "<div class=\"small-12 medium-6 large-12 columns\">"
-                                + "<label>Ignored usernames</label>"
-                                + "<form id=\"checky__ignored\" method=\"post\">",
-            end:                  "</form>"
+            begin:  "<article id=\"checky\" class=\"articles\">"
+                        + "<div>"
+                            + "<div class=\"articles__header\">"
+                                + "<div class=\"articles__header-col\">"
+                                    + "<h1 class=\"articles__h1\">Checky Settings</h1>"
+                                + "</div>"
+                                + "<div class=\"articles__header-col articles__header-col--right\">"
+                                    + "<div class=\"articles__layout-selector\">"
+                                        + "<svg class=\"articles__icon--layout\">"
+                                            + "<g id=\"svg-icon-symbol-layout\" viewBox=\"0 0 24 24\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\">"
+                                                + "<rect class=\"icon-svg icon-svg--accent icon-svg--layout-line1\" x=\"6\" y=\"16\" width=\"12\" height=\"2\"></rect><rect class=\"icon-svg icon-svg--accent icon-svg--layout-line2\" x=\"6\" y=\"11\" width=\"12\" height=\"2\"></rect>"
+                                                + "<rect class=\"icon-svg icon-svg--accent icon-svg--layout-line3\" x=\"6\" y=\"6\" width=\"12\" height=\"2\"></rect>"
+                                                + "<path d=\"M2,2 L2,22 L22,22 L22,2 L2,2 Z M1,1 L23,1 L23,23 L1,23 L1,1 Z\" id=\"icon-svg__border\" class=\"icon-svg icon-svg--accent\" fill-rule=\"nonzero\"></path>"
+                                            + "</g>"
+                                        + "</svg>"
+                                    + "</div>"
+                                + "</div>"
+                            + "</div>"
+                            + "<hr class=\"articles__hr\">"
+                        + "</div>"
+                        + "<div class=\"Settings\">"
+                            +"<div class=\"row\">"
+                                + "<div class=\"small-12 medium-6 large-4 columns\">"
+                                    + "<br>"
+                                    + "<br>"
+                                    + "<h4>Preferences</h4>"
+                                    + "<div class=\"row\">"
+                                        + "<div class=\"small-12 medium-6 large-12 columns\">"
+                                            + "<label>Ignored usernames</label>"
+                                            + "<form id=\"checky__ignored\" method=\"post\">",
+            end:                            "</form>"
+                                        + "</div>"
+                                    + "</div>"
+                                + "</div>"
                             + "</div>"
                         + "</div>"
-                    + "</div>"
-                + "</div>"
+                    + "</article>"
         },
         button: {
             class: _isBig => "button",
@@ -131,6 +159,11 @@ const attr = {
         select: {
             class: "",
             style: isFirstChild => isFirstChild ? "margin-right: 1rem" : "margin: 0 1rem"
+        },
+        settingsLink: {
+            aClassActive: "active",
+            icon: "",
+            liClassActive: ""
         },
         table: {
             class: ""
@@ -210,6 +243,11 @@ const attr = {
         select: {
             class: "form-control mr-10 ml-10",
             style: _isFirstChild => "display: inline-block"
+        },
+        settingsLink: {
+            aClassActive: "router-link-exact-active router-link-active",
+            icon: "",
+            liClassActive: "active"
         },
         table: {
             class: "table table-striped"
