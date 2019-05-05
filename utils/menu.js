@@ -25,6 +25,8 @@ const menu = {
                     currentPageLink.parentElement.className = "";
                     elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
                     elements.checkyLink.children[0].className = attr[menu.app].settingsLink.aClassActive;
+                } else if (document.contains(elements.checkyContent)) {
+                    elements.checkyContent.remove();
                 }
             }
         }
