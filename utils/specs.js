@@ -18,16 +18,24 @@ const specs = {
     },
     menu: {
         getInsertionLandmarkAndMenu: async app => {
+            let linkLandmark, appMenu;
             switch(app) {
                 case "steemit":
-                    const linkLandmark = document.querySelector(".UserProfile__top-menu > .columns.shrink > ul");
-                    const appMenu = document.getElementsByClassName("UserProfile__top-menu")[0];
+                    linkLandmark = document.querySelector(".UserProfile__top-menu > .columns.shrink > ul");
+                    appMenu = document.getElementsByClassName("UserProfile__top-menu")[0];
                     return {linkLandmark, appMenu};
+                case "steempeak":
+                    while(!document.body.contains(linkLandmark)) {
+                        await sleep(1);
+                        linkLandmark = document.getElementsByClassName("nav-tabs")[0];
+                    }
+                    return {linkLandmark, appMenu: linkLandmark};
             }
         }
     },
     settings: {
         getInsertionLandmark: async app => {
+            let settingsLandmark, appContent;
             switch(app) {
                 case "busy":
                     let settingsElt;
@@ -37,14 +45,21 @@ const specs = {
                     }
                     return settingsElt.parentElement;
                 case "steemit":
-                    return document.getElementsByClassName("UserProfile__tab_content")[0];
+                    settingsLandmark = document.getElementsByClassName("UserProfile__tab_content")[0];
+                    appContent = settingsLandmark.children[0];
+                    return {settingsLandmark, appContent};
                 case "steempeak":
-                    let panel;
-                    while(!panel) {
+                    while(!appContent) {
                         await sleep(100);
-                        panel = document.getElementsByClassName("panel")[0];
+                        appContent = appContent || document.getElementsByClassName("tab-pane")[0];
                     }
-                    return panel.parentElement;
+                    const saveSettings = document.getElementsByClassName("pb-20")[0];
+                    if(saveSettings) saveSettings.remove();
+                    [...document.getElementsByClassName("panel")].slice(1).forEach(panel => panel.remove());
+                    return {
+                        settingsLandmark: appContent.parentElement,
+                        appContent
+                    };
             }
         }
     }

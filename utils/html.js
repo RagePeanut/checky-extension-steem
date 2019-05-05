@@ -48,9 +48,9 @@ const html = {
             + attr[app].textInput.class + "\" style=\"display: inline-block; vertical-align: middle; width: 60%; " + attr[app].textInput.style + "\" required>"
         + html.change(app)
         + html.back(app),
-    settingsLink: (app, isActive) => 
-        "<li id=\"checky__link\" class=\"" + (isActive ? attr[app].settingsLink.liClassActive : "") + "\">"
-            + "<a href=\"#checky-settings\" class=\"" + (isActive ? attr[app].settingsLink.aClassActive : "") + "\">"
+    settingsLink: app => 
+        "<li id=\"checky__link\">"
+            + "<a href=\"#checky-settings\">"
                 + attr[app].settingsLink.icon + "Checky"
             + "</a>"
         + "</li>",

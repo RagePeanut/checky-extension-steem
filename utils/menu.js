@@ -14,31 +14,42 @@ const menu = {
                     event.target.parentElement.className = attr[menu.app].settingsLink.liClassActive;
                     event.target.className = attr[menu.app].settingsLink.aClassActive;
                 }
-            } else if(event.target.innerText === "Checky") {
-                await settings.init(menu.app, menu.path, true);
-                elements.appContent.style.display = "none";
-                elements.checkyContent.style.display = "block";
-                const currentPageLink = document.querySelector("a.active");
-                currentPageLink.className = "";
-                currentPageLink.parentElement.className = "";
-                elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
-                elements.checkyLink.children[0].className = attr[menu.app].settingsLink.aClassActive;
+            } else if(event.target.innerText.toLowerCase() === "checky") {
+                if(menu.app === "steemit") {
+                    if(menu.hasBeenOnSettingsPage) {
+                        elements.appContent.style.display = "none";
+                        elements.checkyContent.style.display = "block";
+                    }
+                    const currentPageLink = document.querySelector("a.active");
+                    currentPageLink.className = "";
+                    currentPageLink.parentElement.className = "";
+                    elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
+                    elements.checkyLink.children[0].className = attr[menu.app].settingsLink.aClassActive;
+                }
             }
         }
     },
     init: async (app, path, isOnSettingsPage) => {
         menu.path = path;
         menu.isOnSettingsPage = isOnSettingsPage;
-        if(!elements.checkyLink) {
+        menu.hasBeenOnSettingsPage = menu.hasBeenOnSettingsPage || isOnSettingsPage;
+        if(!document.body.contains(elements.checkyLink) || app === "steempeak" && isOnSettingsPage) {
             menu.app = app;
-            const {linkLandmark, appMenu} = await specs.menu.getInsertionLandmarkAndMenu(app);
-            linkLandmark.insertAdjacentHTML("beforeend", html.settingsLink(app, isOnSettingsPage));
-            if(isOnSettingsPage) document.querySelector(".UserProfile a[href=\"" + path + "\"]").className = "";
+            if(!document.body.contains(elements.checkyLink)) {
+                const {linkLandmark, appMenu} = await specs.menu.getInsertionLandmarkAndMenu(app);
+                linkLandmark.insertAdjacentHTML("beforeend", html.settingsLink(app));
+                elements.appMenu = appMenu;
+                elements.appMenu.addEventListener("click", menu.changeLinkState);
+            }
             elements.checkyLink = document.getElementById("checky__link");
-            elements.appMenu = appMenu;
-            elements.appMenu.addEventListener("click", menu.changeLinkState);
+            if(isOnSettingsPage) {
+                document.querySelector(attr[app].menuLink.selector(path)).className = "";
+                elements.checkyLink.className = attr[app].settingsLink.liClassActive;
+                elements.checkyLink.children[0].className = attr[app].settingsLink.aClassActive;
+            }
         }
     },
+    hasBeenOnSettingsPage: false,
     isOnSettingsPage: false,
     path: null
 };

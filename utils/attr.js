@@ -59,6 +59,9 @@ const attr = {
                     + "</label>"
                 + "</div>"
         },
+        menuLink: {
+            selector: _path => ""
+        },
         removeButtons: {
             class: ""
         },
@@ -153,6 +156,9 @@ const attr = {
                     "<span style=\"margin-left: 0.5rem; font-size: 1rem\">" + username + "</span>"
                 + "</label>"
         },
+        menuLink: {
+            selector: path => ".UserProfile a[href=\"" + path + "\"]"
+        },
         removeButtons: {
             class: ""
         },
@@ -196,8 +202,8 @@ const attr = {
             end: "</div></div></div>"
         },
         baseSettings: {
-            begin: 
-                "<div class=\"panel panel-flat\">"
+            begin:
+                "<div id=\"checky\" class=\"tab-pane active\">"
                     + "<div class=\"panel-body no-padding-top\">"
                         + "<table class=\"table tasks-list table-lg\">"
                             + "<tbody>"
@@ -236,6 +242,9 @@ const attr = {
             end: username => 
                     "<span class=\"ml-10\">" + username + "</span>"
                 + "</label>"
+        },
+        menuLink: {
+            selector: _path => "li.active"
         },
         removeButtons: {
             class: "text-center"
