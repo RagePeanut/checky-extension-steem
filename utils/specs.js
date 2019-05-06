@@ -20,7 +20,7 @@ const specs = {
         getActiveLink: app => {
             switch(app) {
                 case "busy":
-                    return document.getElementsByClassName(".Sidenav__item--active")[0];
+                    return document.getElementsByClassName("Sidenav__item--active")[0];
                 case "steemit":
                     return document.querySelector(".UserProfile a.active");
                 case "steempeak":
@@ -76,6 +76,16 @@ const specs = {
                         settingsLandmark: appContent.parentElement,
                         appContent
                     };
+            }
+        },
+        getUsername: app => {
+            switch(app) {
+                case "busy":
+                    return document.getElementsByClassName("Topnav__user")[0].getAttribute("href").slice(2);
+                case "steemit":
+                    return document.querySelector(".Header__userpic > span").getAttribute("title");
+                case "steempeak":
+                    return document.getElementsByClassName("avatar-name")[0].innerText;
             }
         }
     }

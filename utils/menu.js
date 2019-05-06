@@ -36,7 +36,8 @@ const menu = {
         menu.path = path;
         menu.isOnSettingsPage = isOnSettingsPage;
         menu.hasBeenOnSettingsPage = menu.hasBeenOnSettingsPage || isOnSettingsPage;
-        if(!document.body.contains(elements.checkyLink) || app === "steempeak" && isOnSettingsPage) {
+        if((app === "busy" || path.includes("@" + specs.settings.getUsername(app)))
+            && (!document.body.contains(elements.checkyLink) || app === "steempeak" && isOnSettingsPage)) {
             menu.app = app;
             if(!document.body.contains(elements.checkyLink)) {
                 const {linkLandmark, appMenu} = await specs.menu.getInsertionLandmarkAndMenu(app);
