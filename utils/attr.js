@@ -59,9 +59,6 @@ const attr = {
                     + "</label>"
                 + "</div>"
         },
-        menuLink: {
-            selector: ".Sidenav__item--active"
-        },
         removeButtons: {
             class: ""
         },
@@ -156,9 +153,6 @@ const attr = {
                     "<span style=\"margin-left: 0.5rem; font-size: 1rem\">" + username + "</span>"
                 + "</label>"
         },
-        menuLink: {
-            selector: ".UserProfile a.active"
-        },
         removeButtons: {
             class: ""
         },
@@ -242,9 +236,6 @@ const attr = {
             end: username => 
                     "<span class=\"ml-10\">" + username + "</span>"
                 + "</label>"
-        },
-        menuLink: {
-            selector: "li.active > a"
         },
         removeButtons: {
             class: "text-center"

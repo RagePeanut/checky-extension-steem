@@ -17,6 +17,16 @@ const specs = {
         }
     },
     menu: {
+        getActiveLink: app => {
+            switch(app) {
+                case "busy":
+                    return document.getElementsByClassName(".Sidenav__item--active")[0];
+                case "steemit":
+                    return document.querySelector(".UserProfile a.active");
+                case "steempeak":
+                    return document.querySelector("li.active > a");
+            }
+        },
         getInsertionLandmarkAndMenu: async app => {
             let linkLandmark, appMenu;
             switch(app) {

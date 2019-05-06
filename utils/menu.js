@@ -21,7 +21,7 @@ const menu = {
                         elements.appContent.style.display = "none";
                         elements.checkyContent.style.display = "block";
                     }
-                    const activeLink = document.querySelector(attr[menu.app].menuLink.selector);
+                    const activeLink = specs.menu.getActiveLink(menu.app);
                     activeLink.className = "";
                     activeLink.parentElement.className = "";
                     elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
@@ -46,7 +46,7 @@ const menu = {
             }
             elements.checkyLink = document.getElementById("checky__link");
             if(isOnSettingsPage) {
-                const activeLink = document.querySelector(attr[app].menuLink.selector);
+                const activeLink = specs.menu.getActiveLink(app);
                 activeLink.className = "";
                 activeLink.parentElement.className = "";
                 elements.checkyLink.className = attr[app].settingsLink.liClassActive;
