@@ -60,7 +60,7 @@ const attr = {
                 + "</div>"
         },
         menuLink: {
-            selector: _path => ".Sidenav__item--active"
+            selector: ".Sidenav__item--active"
         },
         removeButtons: {
             class: ""
@@ -157,7 +157,7 @@ const attr = {
                 + "</label>"
         },
         menuLink: {
-            selector: path => ".UserProfile a[href=\"" + path + "\"]"
+            selector: ".UserProfile a.active"
         },
         removeButtons: {
             class: ""
@@ -244,7 +244,7 @@ const attr = {
                 + "</label>"
         },
         menuLink: {
-            selector: _path => "li.active > a"
+            selector: "li.active > a"
         },
         removeButtons: {
             class: "text-center"

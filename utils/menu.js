@@ -4,23 +4,24 @@ const menu = {
      * @param {Event} event
      */
     changeLinkState: async (event) => {
-        if(event.target.innerText !== "Rewards" && event.target.getAttribute("target") !== "_blank") {
+        const target = event.target.getAttribute("href") ? event.target : event.target.parentElement;
+        if(target.innerText !== "Rewards" && target.getAttribute("target") !== "_blank") {
             if(menu.isOnSettingsPage) {
-                if(event.target.innerText !== "Checky" && !/\n/.test(event.target.innerText)) {
+                if(target.innerText !== "Checky" && !/\n/.test(target.innerText)) {
                     elements.checkyContent.style.display = "none";
                     elements.appContent.style.display = "block";
                     elements.checkyLink.className = "";
                     elements.checkyLink.children[0].className = "";
-                    event.target.parentElement.className = attr[menu.app].settingsLink.liClassActive;
-                    event.target.className = attr[menu.app].settingsLink.aClassActive;
+                    target.parentElement.className = attr[menu.app].settingsLink.liClassActive;
+                    target.className = attr[menu.app].settingsLink.aClassActive;
                 }
-            } else if(event.target.innerText.toLowerCase() === "checky") {
+            } else if(target.innerText.toLowerCase() === "checky") {
                 if(menu.app !== "steempeak") {
                     if(menu.hasBeenOnSettingsPage) {
                         elements.appContent.style.display = "none";
                         elements.checkyContent.style.display = "block";
                     }
-                    const activeLink = document.querySelector(attr[menu.app].menuLink.selector(menu.path));
+                    const activeLink = document.querySelector(attr[menu.app].menuLink.selector);
                     activeLink.className = "";
                     activeLink.parentElement.className = "";
                     elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
@@ -45,7 +46,7 @@ const menu = {
             }
             elements.checkyLink = document.getElementById("checky__link");
             if(isOnSettingsPage) {
-                const activeLink = document.querySelector(attr[app].menuLink.selector(path));
+                const activeLink = document.querySelector(attr[app].menuLink.selector);
                 activeLink.className = "";
                 activeLink.parentElement.className = "";
                 elements.checkyLink.className = attr[app].settingsLink.liClassActive;
