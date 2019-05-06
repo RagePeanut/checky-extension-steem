@@ -20,6 +20,9 @@ const specs = {
         getInsertionLandmarkAndMenu: async app => {
             let linkLandmark, appMenu;
             switch(app) {
+                case "busy":
+                    linkLandmark = document.getElementsByClassName("Sidenav")[0];
+                    return {linkLandmark, appMenu: linkLandmark};
                 case "steemit":
                     linkLandmark = document.querySelector(".UserProfile__top-menu > .columns.shrink > ul");
                     appMenu = document.getElementsByClassName("UserProfile__top-menu")[0];
@@ -38,12 +41,15 @@ const specs = {
             let settingsLandmark, appContent;
             switch(app) {
                 case "busy":
-                    let settingsElt;
-                    while(!settingsElt) {
+                    settingsLandmark = document.getElementsByClassName("container")[0];
+                    while(!appContent) {
                         await sleep(100);
-                        settingsElt = document.getElementsByClassName("Settings")[0];
+                        appContent = settingsLandmark.getElementsByClassName("center")[0];
                     }
-                    return settingsElt.parentElement;
+                    const rightContainer = document.getElementsByClassName("rightContainer")[0];
+                    if(rightContainer) rightContainer.style.display = "none";
+                    settingsLandmark.className = "settings-layout container";
+                    return {settingsLandmark, appContent};
                 case "steemit":
                     settingsLandmark = document.getElementsByClassName("UserProfile__tab_content")[0];
                     appContent = settingsLandmark.children[0];

@@ -25,8 +25,8 @@ const attr = {
                 + "</div>"
         },
         baseSettings: {
-            begin: 
-                "<div id=\"checky\">"
+            begin:
+                "<div id=\"checky\" class=\"center\">"
                     + "<h1><span>Checky Settings</span></h1>"
                     + "<div class=\"Settings\">"
                         + "<h3><span>Ignored usernames</span></h3>"
@@ -60,7 +60,7 @@ const attr = {
                 + "</div>"
         },
         menuLink: {
-            selector: _path => ""
+            selector: _path => ".Sidenav__item--active"
         },
         removeButtons: {
             class: ""
@@ -244,7 +244,7 @@ const attr = {
                 + "</label>"
         },
         menuLink: {
-            selector: _path => "li.active"
+            selector: _path => "li.active > a"
         },
         removeButtons: {
             class: "text-center"

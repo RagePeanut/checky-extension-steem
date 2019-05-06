@@ -15,14 +15,14 @@ const menu = {
                     event.target.className = attr[menu.app].settingsLink.aClassActive;
                 }
             } else if(event.target.innerText.toLowerCase() === "checky") {
-                if(menu.app === "steemit") {
+                if(menu.app !== "steempeak") {
                     if(menu.hasBeenOnSettingsPage) {
                         elements.appContent.style.display = "none";
                         elements.checkyContent.style.display = "block";
                     }
-                    const currentPageLink = document.querySelector("a.active");
-                    currentPageLink.className = "";
-                    currentPageLink.parentElement.className = "";
+                    const activeLink = document.querySelector(attr[menu.app].menuLink.selector(menu.path));
+                    activeLink.className = "";
+                    activeLink.parentElement.className = "";
                     elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
                     elements.checkyLink.children[0].className = attr[menu.app].settingsLink.aClassActive;
                 } else if (document.contains(elements.checkyContent)) {
@@ -45,7 +45,9 @@ const menu = {
             }
             elements.checkyLink = document.getElementById("checky__link");
             if(isOnSettingsPage) {
-                document.querySelector(attr[app].menuLink.selector(path)).className = "";
+                const activeLink = document.querySelector(attr[app].menuLink.selector(path));
+                activeLink.className = "";
+                activeLink.parentElement.className = "";
                 elements.checkyLink.className = attr[app].settingsLink.liClassActive;
                 elements.checkyLink.children[0].className = attr[app].settingsLink.aClassActive;
             }
