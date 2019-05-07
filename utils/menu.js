@@ -9,7 +9,12 @@ const menu = {
             if(menu.isOnSettingsPage) {
                 if(target.innerText !== "Checky" && !/\n/.test(target.innerText)) {
                     elements.checkyContent.style.display = "none";
-                    elements.appContent.style.display = "block";
+                    elements.appContents.forEach(appContent => {
+                        if(document.body.contains(appContent)) {
+                            appContent.style.display = "block";
+                        }
+                    });
+                    elements.settingsLandmark.className = attr[menu.app].settingsLandmark.appClass;
                     elements.checkyLink.className = "";
                     elements.checkyLink.children[0].className = "";
                     target.parentElement.className = attr[menu.app].settingsLink.liClassActive;
@@ -18,7 +23,11 @@ const menu = {
             } else if(target.innerText.toLowerCase() === "checky") {
                 if(menu.app !== "steempeak") {
                     if(menu.hasBeenOnSettingsPage) {
-                        elements.appContent.style.display = "none";
+                        elements.appContents.forEach(appContent => {
+                            if(document.body.contains(appContent)) {
+                                appContent.style.display = "none";
+                            }
+                        });
                         elements.checkyContent.style.display = "block";
                     }
                     const activeLink = specs.menu.getActiveLink(menu.app);
@@ -35,8 +44,7 @@ const menu = {
     init: async (app, path, isOnSettingsPage) => {
         menu.path = path;
         menu.isOnSettingsPage = isOnSettingsPage;
-        menu.hasBeenOnSettingsPage = menu.hasBeenOnSettingsPage || isOnSettingsPage;
-        if((app === "busy" || path.includes("@" + specs.settings.getUsername(app)))
+        if((app === "busy" || path.includes("@" + await specs.settings.getUsername(app)))
             && (!document.body.contains(elements.checkyLink) || app === "steempeak" && isOnSettingsPage)) {
             menu.app = app;
             if(!document.body.contains(elements.checkyLink)) {
@@ -54,6 +62,7 @@ const menu = {
                 elements.checkyLink.children[0].className = attr[app].settingsLink.aClassActive;
             }
         }
+        menu.hasBeenOnSettingsPage = menu.hasBeenOnSettingsPage || isOnSettingsPage;
     },
     hasBeenOnSettingsPage: false,
     isOnSettingsPage: false,

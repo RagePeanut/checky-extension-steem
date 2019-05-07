@@ -66,6 +66,10 @@ const attr = {
             class: "",
             style: isFirstChild => isFirstChild ? "margin-right: 10px" : "margin: 0 10px"
         },
+        settingsLandmark: {
+            appClass: "",
+            checkyClass: "settings-layout container"
+        },
         settingsLink: {
             aClassActive: "Sidenav__item--active",
             icon: "<i class=\"iconfont icon-setup\"></i>",
@@ -160,6 +164,10 @@ const attr = {
             class: "",
             style: isFirstChild => isFirstChild ? "margin-right: 1rem" : "margin: 0 1rem"
         },
+        settingsLandmark: {
+            appClass: "",
+            checkyClass: "UserProfile__tab_content column layout-list settings"
+        },
         settingsLink: {
             aClassActive: "active",
             icon: "",
@@ -243,6 +251,10 @@ const attr = {
         select: {
             class: "form-control mr-10 ml-10",
             style: _isFirstChild => "display: inline-block"
+        },
+        settingsLandmark: {
+            appClass: "tab-content",
+            checkyClass: "tab-content"
         },
         settingsLink: {
             aClassActive: "router-link-exact-active router-link-active",

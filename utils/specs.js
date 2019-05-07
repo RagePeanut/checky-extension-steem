@@ -48,44 +48,49 @@ const specs = {
     },
     settings: {
         getInsertionLandmark: async app => {
-            let settingsLandmark, appContent;
+            let settingsLandmark;
+            const appContents = [];
             switch(app) {
                 case "busy":
                     settingsLandmark = document.getElementsByClassName("container")[0];
-                    while(!appContent) {
+                    while(!appContents[0]) {
                         await sleep(100);
-                        appContent = settingsLandmark.getElementsByClassName("center")[0];
+                        appContents[0] = settingsLandmark.getElementsByClassName("center")[0];
                     }
                     const rightContainer = document.getElementsByClassName("rightContainer")[0];
-                    if(rightContainer) rightContainer.style.display = "none";
-                    settingsLandmark.className = "settings-layout container";
-                    return {settingsLandmark, appContent};
+                    if(rightContainer) appContents.push(rightContainer);
+                    return {settingsLandmark, appContents};
                 case "steemit":
                     settingsLandmark = document.getElementsByClassName("UserProfile__tab_content")[0];
-                    appContent = settingsLandmark.children[0];
-                    return {settingsLandmark, appContent};
+                    appContents.push(settingsLandmark.children[0]);
+                    return {settingsLandmark, appContents};
                 case "steempeak":
-                    while(!appContent) {
+                    while(!appContents[0]) {
                         await sleep(100);
-                        appContent = appContent || document.getElementsByClassName("tab-pane")[0];
+                        appContents[0] = document.getElementsByClassName("tab-pane")[0];
                     }
                     const saveSettings = document.getElementsByClassName("pb-20")[0];
-                    if(saveSettings) saveSettings.remove();
-                    [...document.getElementsByClassName("panel")].slice(1).forEach(panel => panel.remove());
+                    if(saveSettings) appContents.push(saveSettings);
+                    [...document.getElementsByClassName("panel")].slice(1).forEach(panel => appContents.push(panel));
                     return {
-                        settingsLandmark: appContent.parentElement,
-                        appContent
+                        settingsLandmark: appContents[0].parentElement,
+                        appContents
                     };
             }
         },
-        getUsername: app => {
+        getUsername: async app => {
             switch(app) {
                 case "busy":
                     return document.getElementsByClassName("Topnav__user")[0].getAttribute("href").slice(2);
                 case "steemit":
                     return document.querySelector(".Header__userpic > span").getAttribute("title");
                 case "steempeak":
-                    return document.getElementsByClassName("avatar-name")[0].innerText;
+                    let usernameElt;
+                    while(!usernameElt) {
+                        await sleep(1);
+                        usernameElt = document.getElementsByClassName("avatar-name")[0];
+                    }
+                    return usernameElt.innerText;
             }
         }
     }

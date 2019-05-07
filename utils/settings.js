@@ -31,14 +31,17 @@ const settings = {
      */
     init: async (app, path, isOnSettingsPage) => {
         menu.init(app, path, isOnSettingsPage);
-        if(isOnSettingsPage && !elements.checkyContent || app !== "steemit" && isOnSettingsPage) {
+        if(isOnSettingsPage && (!elements.checkyContent || app !== "steemit")) {
             settings.app = app;
             if(!document.body.contains(elements.checkyContent)) {
-                const {settingsLandmark, appContent} = await specs.settings.getInsertionLandmark(app);
-                elements.appContent = appContent;
-                elements.appContent.style.display = "none";
+                const {settingsLandmark, appContents} = await specs.settings.getInsertionLandmark(app);
+                elements.appContents = appContents;
+                elements.appContents.forEach(appContent => appContent.style.display = "none");
                 settingsLandmark.insertAdjacentHTML("beforeend", html.baseSettings(ignored.sort(), app));
+                elements.settingsLandmark = settingsLandmark;
             }
+            attr[app].settingsLandmark.appClass = elements.settingsLandmark.className;
+            elements.settingsLandmark.className = attr[menu.app].settingsLandmark.checkyClass;
             elements.checkyContent = document.getElementById("checky");
             elements.checkyIgnoredForm = document.getElementById("checky__ignored");
             elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
