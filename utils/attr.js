@@ -205,8 +205,25 @@ const attr = {
         },
         baseSettings: {
             begin:
-                "<div id=\"checky\" class=\"tab-pane active\">"
-                    + "<div class=\"panel-body no-padding-top no-padding-right no-padding-left\">"
+                "<div id=\"checky\" class=\"tab-pane active checky-content\">"
+                    + "<table class=\"table tasks-list table-lg\">"
+                        + "<tbody>",      
+            end:        "</tbody>"
+                    + "</table>"
+                    + "<div class=\"text-center pb-10 pt-10\">"
+                        + "<button data-style=\"slide-right\" class=\"btn btn-primary btn-ladda btn-ladda-spinner ladda-button\">"
+                            + "<span class=\"ladda-label\">"
+                                + "<span>Save Settings</span>"
+                            + "</span>"
+                            + "<span class=\"ladda-spinner\">"
+                        + "</button>"
+                    + "</div>"
+                + "</div>"
+        },
+        baseSettingsIgnored: {
+            begin:
+                "<div class=\"panel panel-flat checky-content\">"
+                    + "<div class=\"panel-body no-padding-top\">"
                         + "<table class=\"table tasks-list table-lg\">"
                             + "<tbody>"
                                 + "<tr>"
@@ -216,7 +233,7 @@ const attr = {
                                         + "</div>"
                                         + "<div class=\"text-muted pb-10\">Check the ignored usernames you want to remove from the list.</div>"
                                         + "<form id=\"checky__ignored\" method=\"post\">",
-            end:                        "</form>"
+             end:                       "</form>"
                                     + "</td>"
                                 + "</tr>"
                             + "</tbody>"

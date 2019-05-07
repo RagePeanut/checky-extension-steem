@@ -8,9 +8,17 @@ let elements;
 let correctMentions = [];
 let wrongMentions;
 
-let ignored;
+let authorizations, ignored, sortingOrder;
 
-chrome.storage.sync.get(['ignored'], storage => ignored = storage.ignored || []);
+chrome.storage.sync.get(["ignored", "authorizations", "sortingOrder"], storage => {
+    ignored = storage.ignored || [];
+    authorizations = storage.authorizations || {
+        busy: true,
+        steemit: true,
+        steempeak: true
+    };
+    sortingOrder = storage.sortingOrder || "alphabetical+";
+});
 
 chrome.runtime.onMessage.addListener(init);
 

@@ -31,18 +31,23 @@ const settings = {
      */
     init: async (app, path, isOnSettingsPage) => {
         menu.init(app, path, isOnSettingsPage);
-        if(isOnSettingsPage && (!elements.checkyContent || app !== "steemit")) {
+        if(isOnSettingsPage && (!elements.checkyContents || !elements.checkyContents[0] || app !== "steemit")) {
             settings.app = app;
-            if(!document.body.contains(elements.checkyContent)) {
+            if(!elements.checkyContents || !document.body.contains(elements.checkyContents[0])) {
+                if(elements.checkyContents && document.body.contains(elements.checkyContents[1])) {
+                    elements.checkyContents[1].remove();
+                }
                 const {settingsLandmark, appContents} = await specs.settings.getInsertionLandmark(app);
                 elements.appContents = appContents;
                 elements.appContents.forEach(appContent => appContent.style.display = "none");
-                settingsLandmark.insertAdjacentHTML("beforeend", html.baseSettings(ignored.sort(), app));
+                settingsLandmark.insertAdjacentHTML("beforeend", html.baseSettings(sortingOrder, app));
                 elements.settingsLandmark = settingsLandmark;
+                const ignoredSettingLandmark = specs.settings.getIgnoredInsertionLandmark(app);
+                ignoredSettingLandmark.insertAdjacentHTML("beforeend", html.baseSettingsIgnored(ignored.sort(), app));
             }
             attr[app].settingsLandmark.appClass = elements.settingsLandmark.className;
             elements.settingsLandmark.className = attr[menu.app].settingsLandmark.checkyClass;
-            elements.checkyContent = document.getElementById("checky");
+            elements.checkyContents = [...document.getElementsByClassName("checky-content")];
             elements.checkyIgnoredForm = document.getElementById("checky__ignored");
             elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
             elements.checkyIgnoredFormRemoveAll = document.getElementById("checky__ignored-removeAll");

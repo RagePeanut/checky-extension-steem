@@ -47,6 +47,16 @@ const specs = {
         }
     },
     settings: {
+        getIgnoredInsertionLandmark: app => {
+            switch(app) {
+                case "busy":
+                    return;
+                case "steemit":
+                    return;
+                case "steempeak":
+                    return document.getElementsByClassName("col-lg-offset-3 col-lg-6")[0];
+            }
+        },
         getInsertionLandmark: async app => {
             let settingsLandmark;
             const appContents = [];
@@ -71,7 +81,11 @@ const specs = {
                     }
                     const saveSettings = document.getElementsByClassName("pb-20")[0];
                     if(saveSettings) appContents.push(saveSettings);
-                    [...document.getElementsByClassName("panel")].slice(1).forEach(panel => appContents.push(panel));
+                    [...document.getElementsByClassName("panel")].slice(1).forEach(panel => {
+                        if(!panel.classList.contains("checky-content")) {
+                            appContents.push(panel);
+                        }
+                    });
                     return {
                         settingsLandmark: appContents[0].parentElement,
                         appContents

@@ -179,12 +179,13 @@ const editor = {
             });
             let options = "";
             for(const suggestion of suggestions) {
-                options += html.option(suggestion, false);
+                options += html.option(suggestion, suggestion, false, false);
             }
             td.innerHTML = html.suggestions(options, suggestions[0], editor.app, isFirstSuggestions);
             td.getElementsByTagName("select")[0].addEventListener("change", editor.changeUserPreview)
         } else {
-            td.innerHTML = html.suggestions(html.option("No username found", true), null, editor.app, isFirstSuggestions);
+            const option = html.option("", "No username found", true, false);
+            td.innerHTML = html.suggestions(option, null, editor.app, isFirstSuggestions);
         }
     },
     /**
