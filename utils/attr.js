@@ -206,7 +206,7 @@ const attr = {
         baseSettings: {
             begin:
                 "<div id=\"checky\" class=\"tab-pane active\">"
-                    + "<div class=\"panel-body no-padding-top\">"
+                    + "<div class=\"panel-body no-padding-top no-padding-right no-padding-left\">"
                         + "<table class=\"table tasks-list table-lg\">"
                             + "<tbody>"
                                 + "<tr>"
