@@ -39,8 +39,9 @@ const settings = {
             elements.authorizationCheckboxes = [...document.getElementsByClassName("checky__authorization-checkbox") || []];
             elements.authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("change", () => {
                 if(event.target.checked || elements.authorizationCheckboxes.some(checkbox => checkbox.checked)) {
-                    if(menu.app === "busy") settings.changeCheckboxClass(event.target);
+                    if(settings.app === "busy") settings.changeCheckboxClass(event.target);
                 } else {
+                    event.target.checked = true;
                     event.target.click();
                 }
             }));
