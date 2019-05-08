@@ -8,9 +8,9 @@ let elements;
 let correctMentions = [];
 let wrongMentions;
 
-let authorizations, ignored, sortingOrder;
+let authorizations, ignored, sortingOrder, isCaseSensitive;
 
-chrome.storage.sync.get(["ignored", "authorizations", "sortingOrder"], storage => {
+chrome.storage.sync.get(["ignored", "authorizations", "sortingOrder", "isCaseSensitive"], storage => {
     ignored = storage.ignored || [];
     authorizations = storage.authorizations || {
         busy: true,
@@ -18,6 +18,7 @@ chrome.storage.sync.get(["ignored", "authorizations", "sortingOrder"], storage =
         steempeak: true
     };
     sortingOrder = storage.sortingOrder || "alphabetical+";
+    isCaseSensitive = storage.isCaseSensitive || false;
 });
 
 chrome.runtime.onMessage.addListener(init);

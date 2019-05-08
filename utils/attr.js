@@ -75,6 +75,22 @@ const attr = {
             class: "Action",
             style: "vertical-align: middle"
         },
+        caseSensitivitySetting: () =>
+            "<div class=\"Settings__section\">"
+                + "<h3><span>Case sensitivity</span></h3>"
+                + "<p><span>You can enable this option to make the mention checking case sensitive.</span></p>"
+                + "<div class=\"Settings__section__checkbox\">"
+                    + "<label class=\"ant-checkbox-wrapper\">"
+                        + "<span class=\"ant-checkbox" + (isCaseSensitive ? " ant-checkbox-checked" : "") + "\">"
+                            + "<input id=\"checky__case-sensitivity\" type=\"checkbox\" class=\"ant-checkbox-input\"" + (isCaseSensitive ? " selected" : "") + " onchange=\"this.checked ? this.parentElement.classList.add('ant-checkbox-checked') : this.parentElement.classList.remove('ant-checkbox-checked')\">"
+                            + "<span class=\"ant-checkbox-inner\"></span>"
+                        + "</span>"
+                        + "<span>"
+                            + "<span>Enable case sensitivity</span>"
+                        + "</span>"
+                    + "</label>"
+                + "</div>"
+            + "</div>",
         checkbox: {
             begin: username => 
                 "<div id=\"checky__ignored-" + username + "\" class=\"Settings__section__checkbox\">"
@@ -152,7 +168,8 @@ const attr = {
                     + attr.steemit.authorizationCheckbox("steemit", "Steemit", authorizations.steemit)
                     + attr.steemit.authorizationCheckbox("steempeak", "SteemPeak", authorizations.steempeak)
                 + "</div>"
-            + "</div>",
+            + "</div>"
+            + "<br>",
         baseEditor: {
             begin: "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
                     + "<h6>Possibly wrong mentions</h6>",
@@ -216,6 +233,16 @@ const attr = {
             class: "button hollow no-border",
             style: "margin-bottom: 0"
         },
+        caseSensitivitySetting: () =>
+            "<div class=\"row\">"
+                + "<div class=\"small-12 medium-6 large-12 columns\">"
+                    + "<label>Case sensitivity</label>"
+                    + "<label>"
+                        + "<input id=\"checky__case-sensitivity\" type=\"checkbox\" onchange=\"document.getElementById('checky__save-settings').click()\" style=\"vertical-align: middle\"" + (isCaseSensitive ? " checked" : "") + ">"
+                        + "<span style=\"font-size: 1rem; vertical-align: middle\">Enable case sensitivity</span>"
+                    + "</label>"
+                + "</div>"
+            + "</div>",
         checkbox: {
             begin: username => 
                 "<label id=\"checky__ignored-" + username + "\" style=\"margin: 0.5rem 0\">"
@@ -365,6 +392,21 @@ const attr = {
             class: "btn btn-sm",
             style: ""
         },
+        caseSensitivitySetting: () =>
+            "<tr>"
+                + "<td>"
+                    + "<div class=\"text-semibold\">"
+                        + "<h5>Use case sensitive matching</h5>"
+                    + "</div>"
+                    + "<div class=\"text-muted\">Enable case sensitivity for the mention matching</div>"
+                + "</td>"
+                + "<td data-v-4c63a4f7 class=\"text-center\">"
+                    + "<label class=\"pt-15 vue-switcher" + (isCaseSensitive ? "" : "vue-switcher--unchecked") + " vue-switcher-theme--bootstrap vue-switcher-color--primary\">"
+                        + "<input id=\"checky__case-sensitivity\" type=\"checkbox\"" + (isCaseSensitive ? " checked" : "") + " onchange=\"this.checked ? this.parentElement.classList.remove('vue-switcher--unchecked') : this.parentElement.classList.add('vue-switcher--unchecked')\">"
+                        + "<div></div>"
+                    + "</label>"
+                + "</td>"
+            + "</tr>",
         checkbox: {
             begin: username =>
                 "<label id=\"checky__ignored-" + username + "\" style=\"display: block\">"
@@ -402,7 +444,7 @@ const attr = {
                     + "</div>"
                     + "<div class=\"text-muted\">Choose the way suggestions should be ordered.</div>"
                 + "</td>"
-                + "<td data-v-4c63a4f7 class=\"text-center no-padding-left no-border-top pr-10\" width=\"25%\">"
+                + "<td data-v-4c63a4f7 class=\"text-center no-padding-left no-border-top pr-10\" width=\"230px\">"
                     + "<select id=\"checky__sorting-order\" name=\"select\" class=\"form-control\">"
                         + html.option("alphabetical+", "Alphabetical+ (Default)", false, selectedValue === "alphabetical+")
                         + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")

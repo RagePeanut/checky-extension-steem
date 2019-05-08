@@ -60,7 +60,7 @@ const editor = {
             return;
         }
         const event = new Event("input", { bubbles: true });
-        elements.textarea.value = elements.textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", "gi"), "@" + newUsername);
+        elements.textarea.value = elements.textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", isCaseSensitive ? "g" : "gi"), "@" + newUsername);
         elements.textarea.dispatchEvent(event);
     },
     /**
@@ -69,7 +69,9 @@ const editor = {
      * @param {string} post The post to check
      */
     checkPost: post => {
-        let matches = post.match(/(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu) || [];
+        console.log(isCaseSensitive);
+        const mentionRegex = new RegExp("(^|[^\\w=/#])@([a-z][a-z\\d.-]*[a-z\\d])", isCaseSensitive ? "gmu" : "gimu");
+        let matches = post.match(mentionRegex) || [];
         // The first character check handles the case of matches such as "@@mention"
         matches = matches.map(mention => {
             const splits = mention.split("@");

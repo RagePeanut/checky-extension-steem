@@ -16,6 +16,7 @@ const html = {
         attr[app].baseSettings.begin
         + attr[app].sortingSetting(selectedValue)
         + attr[app].authorizationSetting()
+        + attr[app].caseSensitivitySetting()
         + attr[app].baseSettings.end,
     baseSettingsIgnored: (ignored, app) => 
         attr[app].baseSettingsIgnored.begin

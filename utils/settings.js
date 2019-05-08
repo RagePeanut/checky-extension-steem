@@ -80,6 +80,7 @@ const settings = {
         const order = document.getElementById("checky__sorting-order").value;
         settings.setSortingOrder(order);
         settings.setAuthorizedApps();
+        settings.setCaseSensitivity();
     },
     /**
      * Sets the apps that Checky can operate on.
@@ -87,6 +88,13 @@ const settings = {
     setAuthorizedApps: () => {
         elements.authorizationCheckboxes.forEach(checkbox => authorizations[checkbox.name.split("__")[1]] = checkbox.checked);
         chrome.storage.sync.set({authorizations: authorizations});
+    },
+    /**
+     * Sets the case sensitivity for the mention checker.
+     */
+    setCaseSensitivity: () => {
+        isCaseSensitive = document.getElementById("checky__case-sensitivity").checked;
+        chrome.storage.sync.set({isCaseSensitive: isCaseSensitive});
     },
     /**
      * Sets the suggestions sorting order.
