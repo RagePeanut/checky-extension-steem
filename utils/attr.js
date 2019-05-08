@@ -12,7 +12,7 @@ const attr = {
             "<div class=\"Settings__section\">"
                 + "<h3><span>Authorized apps</span></h3>"
                 + "<p><span>You can select the apps you want Checky to operate on.</span></p>"
-                + "<div class=\"RawSlider__presets\" style=\"padding-top: 0\">"
+                + "<div class=\"RawSlider__presets\" style=\"padding: 0\">"
                     + "<div class=\"ant-radio-group ant-radio-group-large\">"
                         + attr.busy.authorizationCheckbox("busy", "Busy", authorizations.busy)
                         + attr.busy.authorizationCheckbox("steemit", "Steemit", authorizations.steemit)
@@ -48,7 +48,8 @@ const attr = {
                 "<div id=\"checky checky__settings\" class=\"center checky-content\">"
                     + "<h1><span>Checky Settings</span></h1>"
                     + "<div class=\"Settings\">",
-            end:    "</div>"
+            end:        "<button id=\"checky__save-settings\" class=\"Action Action--big Action--primary\"><span>Save</span></button>"
+                    + "</div>"
                     + "<br>"
                     + "<h1>Ignored usernames</h1>"
                     + "<div id=\"checky__settings\" class=\"Settings\"></div>"
@@ -137,7 +138,7 @@ const attr = {
     steemit: {
         authorizationCheckbox: (name, text, checked) =>
             "<label>"
-                + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"checky__authorization-checkbox\" style=\"vertical-align: middle\"" + (checked ? " checked" : "") + ">"
+                + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"checky__authorization-checkbox\" onchange=\"document.getElementById('checky__save-settings').click()\" style=\"vertical-align: middle\"" + (checked ? " checked" : "") + ">"
                 + "<span style=\"margin-left: 0.5rem; font-size: 1rem\">" + text + "</span>"
             + "</label>",
         authorizationSetting: () =>
@@ -183,6 +184,7 @@ const attr = {
                                 + "<br>"
                                 + "<h4>Preferences</h4>",
             end:            "</div>"
+                            + "<button id=\"checky__save-settings\" style=\"display: none\"></button>"
                         + "</div>"
                         + "<div class=\"row\">"
                             + "<div id=\"checky__settings\" class=\"small-12 medium-6 large-4 columns\">"
@@ -240,7 +242,7 @@ const attr = {
                 + "<div class=\"small-12 medium-6 large-12 columns\">"
                     + "<label>"
                         + "Suggestions order"
-                        + "<select id=\"checky__sorting-order\" name=\"select\">"
+                        + "<select id=\"checky__sorting-order\" name=\"select\" onchange=\"document.getElementById('checky__save-settings').click()\">"
                             + html.option("alphabetical+", "Alphabetical+", false, selectedValue === "alphabetical+")
                             + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
                             + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")
@@ -322,7 +324,7 @@ const attr = {
             end:        "</tbody>"
                     + "</table>"
                     + "<div class=\"text-center pb-10 pt-10\">"
-                        + "<button data-style=\"slide-right\" class=\"btn btn-primary btn-ladda btn-ladda-spinner ladda-button\">"
+                        + "<button id=\"checky__save-settings\" data-style=\"slide-right\" class=\"btn btn-primary btn-ladda btn-ladda-spinner ladda-button\">"
                             + "<span class=\"ladda-label\">"
                                 + "<span>Save Settings</span>"
                             + "</span>"

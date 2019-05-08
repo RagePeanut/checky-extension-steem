@@ -1,5 +1,14 @@
 const settings = {
     app: null,
+    changeCheckboxClass: event => {
+        if(settings.app === "busy") {
+            if(event.target.checked) {
+                event.target.parentElement.parentElement.classList.add("ant-radio-button-wrapper-checked");
+            } else {
+                event.target.parentElement.parentElement.classList.remove("ant-radio-button-wrapper-checked");
+            }
+        }
+    },
     /**
      * Initializes the extension settings variables and DOM elements.
      */
@@ -26,9 +35,9 @@ const settings = {
             elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
             elements.checkyIgnoredFormRemoveAll = document.getElementById("checky__ignored-removeAll");
             if(elements.checkyIgnoredFormRemoveAll) elements.checkyIgnoredFormRemoveAll.addEventListener("click", settings.removeAllIgnored);
-            const authorizationCheckboxes = [...document.getElementsByClassName("checky__authorization-checkbox") || []];
-            authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("change", settings.setAuthorizedApps));
-            document.getElementById("checky__sorting-order").addEventListener("change", settings.setSortingOrder);
+            document.getElementById("checky__save-settings").addEventListener("click", settings.saveSettings);
+            elements.authorizationCheckboxes = [...document.getElementsByClassName("checky__authorization-checkbox") || []];
+            if(app === "busy") elements.authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("change", settings.changeCheckboxClass));
         }
     },
     /**
@@ -58,24 +67,25 @@ const settings = {
         elements.checkyIgnoredForm.innerHTML = html.ignoredAll(ignored, editor.app);
     },
     /**
+     * Saves the settings.
+     */
+    saveSettings: () => {
+        const order = document.getElementById("checky__sorting-order").value;
+        settings.setSortingOrder(order);
+        settings.setAuthorizedApps();
+    },
+    /**
      * Sets the apps that Checky can operate on.
      */
-    setAuthorizedApps: event => {
-        if(settings.app === "busy") {
-            if(event.target.checked) {
-                event.target.parentElement.parentElement.classList.add("ant-radio-button-wrapper-checked");
-            } else {
-                event.target.parentElement.parentElement.classList.remove("ant-radio-button-wrapper-checked");
-            }
-        }
-        authorizations[event.target.name.split("__")[1]] = event.target.checked;
+    setAuthorizedApps: () => {
+        elements.authorizationCheckboxes.forEach(checkbox => authorizations[checkbox.name.split("__")[1]] = checkbox.checked);
         chrome.storage.sync.set({authorizations: authorizations});
     },
     /**
      * Sets the suggestions sorting order.
      */
-    setSortingOrder: event => {
-        sortingOrder = event.target.value;
+    setSortingOrder: order => {
+        sortingOrder = order;
         chrome.storage.sync.set({sortingOrder: sortingOrder});
     }
 }
