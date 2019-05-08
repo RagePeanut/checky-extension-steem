@@ -1,5 +1,24 @@
 const attr = {
     busy: {
+        authorizationCheckbox: (name, text, checked) =>
+            "<label class=\"checky__authorization-checkbox ant-radio-button-wrapper" + (checked ? " ant-radio-button-wrapper-checked" : "") + "\">"
+                + "<span class=\"ant-radio-button ant-radio-button-checked\">"
+                    + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"ant-radio-button-input\"" + (checked ? " checked" : "") + ">"
+                    + "<span class=\"ant-radio-button-inner\"></span>"
+                + "</span>"
+                + "<span>" + text + "</span>"
+            + "</label>",
+        authorizationSetting: () =>
+            "<div class=\"Settings__section\">"
+                + "<h3><span>Authorized apps</span></h3>"
+                + "<p><span>You can select the apps you want Checky to operate on.</span></p>"
+                + "<div class=\"RawSlider__presets\" style=\"padding-top: 0\">"
+                    + "<div class=\"ant-radio-group ant-radio-group-large\">"
+                        + attr.busy.authorizationCheckbox("busy", "Busy", authorizations.busy)
+                        + attr.busy.authorizationCheckbox("steemit", "Steemit", authorizations.steemit)
+                        + attr.busy.authorizationCheckbox("steempeak", "SteemPeak", authorizations.steempeak)
+                    + "</div>"
+                + "</div>",
         baseEditor: {
             begin: 
                 "<div id=\"checky\" class=\"ant-row ant-form-item\" style=\"display: none\">"
@@ -26,14 +45,22 @@ const attr = {
         },
         baseSettings: {
             begin:
-                "<div id=\"checky\" class=\"center\">"
+                "<div id=\"checky checky__settings\" class=\"center checky-content\">"
                     + "<h1><span>Checky Settings</span></h1>"
-                    + "<div class=\"Settings\">"
-                        + "<h3><span>Ignored usernames</span></h3>"
-                        + "<p><span>You can remove usernames from the ignored usernames by checking the corresponding boxes and clicking on the Remove button, or remove all the ignored usernames by clicking on the Remove All button.</span></p>"
-                        + "<form id=\"checky__ignored\" class=\"Settings__section\" method=\"post\">",
-            end:        "</form>"
-                    + "</div>"
+                    + "<div class=\"Settings\">",
+            end:    "</div>"
+                    + "<br>"
+                    + "<h1>Ignored usernames</h1>"
+                    + "<div id=\"checky__settings\" class=\"Settings\"></div>"
+                + "</div>"
+        },
+        baseSettingsIgnored: {
+            begin:
+                "<div class=\"Settings__section checky-content\">"
+                    + "<h3><span>Ignored usernames</span></h3>"
+                    + "<p><span>You can remove usernames from the ignored usernames by checking the corresponding boxes and clicking on the Remove button, or remove all the ignored usernames by clicking on the Remove All button.</span></p>"
+                    + "<form id=\"checky__ignored\" class=\"Settings__section\" method=\"post\">",
+            end:    "</form>"
                 + "</div>"
         },
         button: {
@@ -75,6 +102,17 @@ const attr = {
             icon: "<i class=\"iconfont icon-setup\"></i>",
             liClassActive: ""
         },
+        sortingSetting: selectedValue =>
+            "<div class=\"Settings__section\">"
+                + "<h3><span>Suggestions order</span></h3>"
+                + "<p><span>You can pick the suggestions order that fits your needs the most.</span></p>"
+                + "<select name=\"select\">"
+                    + html.option("alphabetical+", "Alphabetical+", false, selectedValue === "alphabetical+")
+                    + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
+                    + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")
+                    + html.option("most-mentioned-by-account", "Most mentioned by account (Coming soon)", true, selectedValue === "most-mentioned-by-account")
+                + "</select>"
+            + "</div>",
         table: {
             class: ""
         },

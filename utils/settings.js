@@ -52,6 +52,18 @@ const settings = {
             elements.checkyIgnoredForm.addEventListener("submit", settings.removeIgnored);
             elements.checkyIgnoredFormRemoveAll = document.getElementById("checky__ignored-removeAll");
             if(elements.checkyIgnoredFormRemoveAll) elements.checkyIgnoredFormRemoveAll.addEventListener("click", settings.removeAllIgnored);
+            const authorizationCheckboxes = [...document.getElementsByClassName("checky__authorization-checkbox") || []];
+            authorizationCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener("click", () => {
+                    if(event.target.tagName === "INPUT") {
+                        if(event.target.checked) {
+                            event.target.parentElement.parentElement.classList.add("ant-radio-button-wrapper-checked");
+                        } else {
+                            event.target.parentElement.parentElement.classList.remove("ant-radio-button-wrapper-checked");
+                        }
+                    }
+                });
+            });
         }
     }
 }

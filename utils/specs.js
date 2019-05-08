@@ -50,7 +50,6 @@ const specs = {
         getIgnoredInsertionLandmark: app => {
             switch(app) {
                 case "busy":
-                    return;
                 case "steemit":
                     return document.getElementById("checky__settings");
                 case "steempeak":
