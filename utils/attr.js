@@ -97,49 +97,73 @@ const attr = {
         }
     },
     steemit: {
+        authorizationCheckbox: (name, text, checked) =>
+            "<label>"
+                + "<input type=\"checkbox\" name=\"checky__" + name + "\" style=\"vertical-align: middle\"" + (checked ? " checked" : "") + ">"
+                + "<span style=\"margin-left: 0.5rem; font-size: 1rem\">" + text + "</span>"
+            + "</label>",
+        authorizationSetting: () =>
+            "<div class=\"row\">"
+                + "<div class=\"small-12 medium-6 large-12 columns\">"
+                    + "<label>Authorized apps</label>"
+                    + attr.steemit.authorizationCheckbox("busy", "Busy", authorizations.busy)
+                    + attr.steemit.authorizationCheckbox("steemit", "Steemit", authorizations.steemit)
+                    + attr.steemit.authorizationCheckbox("steempeak", "SteemPeak", authorizations.steempeak)
+                + "</div>"
+            + "</div>",
         baseEditor: {
             begin: "<div id=\"checky\" class=\"vframe__section--shrink\" style=\"display: none\">"
                     + "<h6>Possibly wrong mentions</h6>",
             end: "</div>"
         },
         baseSettings: {
-            begin:  "<article id=\"checky\" class=\"articles\">"
-                        + "<div>"
-                            + "<div class=\"articles__header\">"
-                                + "<div class=\"articles__header-col\">"
-                                    + "<h1 class=\"articles__h1\">Checky Settings</h1>"
-                                + "</div>"
-                                + "<div class=\"articles__header-col articles__header-col--right\">"
-                                    + "<div class=\"articles__layout-selector\">"
-                                        + "<svg class=\"articles__icon--layout\">"
-                                            + "<g id=\"svg-icon-symbol-layout\" viewBox=\"0 0 24 24\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\">"
-                                                + "<rect class=\"icon-svg icon-svg--accent icon-svg--layout-line1\" x=\"6\" y=\"16\" width=\"12\" height=\"2\"></rect><rect class=\"icon-svg icon-svg--accent icon-svg--layout-line2\" x=\"6\" y=\"11\" width=\"12\" height=\"2\"></rect>"
-                                                + "<rect class=\"icon-svg icon-svg--accent icon-svg--layout-line3\" x=\"6\" y=\"6\" width=\"12\" height=\"2\"></rect>"
-                                                + "<path d=\"M2,2 L2,22 L22,22 L22,2 L2,2 Z M1,1 L23,1 L23,23 L1,23 L1,1 Z\" id=\"icon-svg__border\" class=\"icon-svg icon-svg--accent\" fill-rule=\"nonzero\"></path>"
-                                            + "</g>"
-                                        + "</svg>"
-                                    + "</div>"
-                                + "</div>"
+            begin:  
+                "<article id=\"checky\" class=\"articles checky-content\">"
+                    + "<div>"
+                        + "<div class=\"articles__header\">"
+                            + "<div class=\"articles__header-col\">"
+                                + "<h1 class=\"articles__h1\">Checky Settings</h1>"
                             + "</div>"
-                            + "<hr class=\"articles__hr\">"
-                        + "</div>"
-                        + "<div class=\"Settings\">"
-                            +"<div class=\"row\">"
-                                + "<div class=\"small-12 medium-6 large-4 columns\">"
-                                    + "<br>"
-                                    + "<br>"
-                                    + "<h4>Preferences</h4>"
-                                    + "<div class=\"row\">"
-                                        + "<div class=\"small-12 medium-6 large-12 columns\">"
-                                            + "<label>Ignored usernames</label>"
-                                            + "<form id=\"checky__ignored\" method=\"post\">",
-            end:                            "</form>"
-                                        + "</div>"
-                                    + "</div>"
+                            + "<div class=\"articles__header-col articles__header-col--right\">"
+                                + "<div class=\"articles__layout-selector\">"
+                                    + "<svg class=\"articles__icon--layout\">"
+                                        + "<g id=\"svg-icon-symbol-layout\" viewBox=\"0 0 24 24\" stroke=\"none\" stroke-width=\"1\" fill=\"none\" fill-rule=\"evenodd\">"
+                                            + "<rect class=\"icon-svg icon-svg--accent icon-svg--layout-line1\" x=\"6\" y=\"16\" width=\"12\" height=\"2\"></rect><rect class=\"icon-svg icon-svg--accent icon-svg--layout-line2\" x=\"6\" y=\"11\" width=\"12\" height=\"2\"></rect>"
+                                            + "<rect class=\"icon-svg icon-svg--accent icon-svg--layout-line3\" x=\"6\" y=\"6\" width=\"12\" height=\"2\"></rect>"
+                                            + "<path d=\"M2,2 L2,22 L22,22 L22,2 L2,2 Z M1,1 L23,1 L23,23 L1,23 L1,1 Z\" id=\"icon-svg__border\" class=\"icon-svg icon-svg--accent\" fill-rule=\"nonzero\"></path>"
+                                        + "</g>"
+                                    + "</svg>"
                                 + "</div>"
                             + "</div>"
                         + "</div>"
-                    + "</article>"
+                        + "<hr class=\"articles__hr\">"
+                    + "</div>"
+                    + "<div class=\"Settings\">"
+                        + "<div class=\"row\">"
+                            + "<div class=\"small-12 medium-6 large-4 columns\">"
+                                + "<br>"
+                                + "<br>"
+                                + "<h4>Preferences</h4>",
+            end:            "</div>"
+                        + "</div>"
+                        + "<div class=\"row\">"
+                            + "<div id=\"checky__settings\" class=\"small-12 medium-6 large-4 columns\">"
+                                + "<br>"
+                                + "<br>"
+                                + "<h4>Ignored usernames</h4>"
+                            + "</div>"
+                        + "</div>"
+                    + "</div>"
+                + "</article>"
+        },
+        baseSettingsIgnored: {
+            begin:
+                "<div class=\"row checky-content\">"
+                    + "<div class=\"small-12 medium-6 large-12 columns\">"
+                        + "<form id=\"checky__ignored\" method=\"post\">",
+            end:        "</form>"
+                    + "</div>"
+                + "</div>"
         },
         button: {
             class: _isBig => "button",
@@ -173,6 +197,21 @@ const attr = {
             icon: "",
             liClassActive: ""
         },
+        sortingSetting: selectedValue =>
+            "<div class=\"row\">"
+                + "<div class=\"small-12 medium-6 large-12 columns\">"
+                    + "<label>"
+                        + "Suggestions order"
+                        + "<select name=\"select\">"
+                            + html.option("alphabetical+", "Alphabetical+", false, selectedValue === "alphabetical+")
+                            + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
+                            + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")
+                            + html.option("most-mentioned-by-account", "Most mentioned by account (Coming soon)", true, selectedValue === "most-mentioned-by-account")
+                        + "</select>"
+                    + "</label>"
+                + "</div>"
+            + "</div>"
+            + "<br>",
         table: {
             class: ""
         },
@@ -195,6 +234,40 @@ const attr = {
         }
     },
     steempeak: {
+        authorizationCheckbox: (name, text, checked) => 
+        "<div class=\"col-md-4\">"
+            + "<span class=\"text-semibold pl-10 pr-10\">"
+                + "<div class=\"p-default p-fill p-smooth p-bigger pretty\">"
+                    + "<input type=\"checkbox\" name=\"checky__" + name + "\"" + (checked ? " checked" : "") + ">"
+                    + "<div class=\"state p-primary\">"
+                        + "<label></label>"
+                    + "</div>"
+                + "</div>"
+                + text
+            + "</span>"
+        + "</div>",
+        authorizationSetting: () => 
+            "<tr>"
+                + "<td colspan=\"2\">"
+                    + "<div class=\"text-semibold\">"
+                        + "<h5>Authorize Checky</h5>"
+                    + "</div>"
+                    + "<div class=\"text-muted\">Authorize Checky to operate on the apps of your choosing.</div>"
+                + "</td>"
+            + "</tr>"
+            + "<tr>"
+                + "<td colspan=\"2\" class=\"no-padding-top no-border-top\">"
+                    + "<div class=\"panel panel-flat border-left-xlg border-left-info no margin-top no-margin-bottom\">"
+                        + "<div class=\"panel-body\">"
+                            + "<div class=\"row\">"
+                                + attr.steempeak.authorizationCheckbox("busy", "Busy", authorizations.busy)
+                                + attr.steempeak.authorizationCheckbox("steemit", "Steemit", authorizations.steemit)
+                                + attr.steempeak.authorizationCheckbox("steempeak", "SteemPeak", authorizations.steempeak)
+                            + "</div>"
+                        + "</div>"
+                    + "</div>"
+                + "</td>"
+            + "</tr>",
         baseEditor: {
             begin: 
                 "<div id=\"checky\" class=\"panel-body\" style=\"display: none; border-top: 0\">"
@@ -278,6 +351,23 @@ const attr = {
             icon: "",
             liClassActive: "active"
         },
+        sortingSetting: selectedValue =>
+            "<tr>"
+                + "<td class=\"no-border-top\">"
+                    + "<div class=\"text-semibold\">"
+                        + "<h5>Suggestions Order</h5>"
+                    + "</div>"
+                    + "<div class=\"text-muted\">Choose the way suggestions should be ordered.</div>"
+                + "</td>"
+                + "<td data-v-4c63a4f7 class=\"text-center no-padding-left no-border-top pr-10\" width=\"25%\">"
+                    + "<select name=\"select\" class=\"form-control\">"
+                        + html.option("alphabetical+", "Alphabetical+ (Default)", false, selectedValue === "alphabetical+")
+                        + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
+                        + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")
+                        + html.option("most-mentioned-by-account", "Most mentioned by account (Coming soon)", true, selectedValue === "most-mentioned-by-account")
+                    + "</select>"
+                + "</td>"
+            + "</tr>",
         table: {
             class: "table table-striped"
         },

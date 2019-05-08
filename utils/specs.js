@@ -52,7 +52,7 @@ const specs = {
                 case "busy":
                     return;
                 case "steemit":
-                    return;
+                    return document.getElementById("checky__settings");
                 case "steempeak":
                     return document.getElementsByClassName("col-lg-offset-3 col-lg-6")[0];
             }
