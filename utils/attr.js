@@ -1,9 +1,9 @@
 const attr = {
     busy: {
         authorizationCheckbox: (name, text, checked) =>
-            "<label class=\"checky__authorization-checkbox ant-radio-button-wrapper" + (checked ? " ant-radio-button-wrapper-checked" : "") + "\">"
+            "<label class=\"ant-radio-button-wrapper" + (checked ? " ant-radio-button-wrapper-checked" : "") + "\">"
                 + "<span class=\"ant-radio-button ant-radio-button-checked\">"
-                    + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"ant-radio-button-input\"" + (checked ? " checked" : "") + ">"
+                    + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"checky__authorization-checkbox ant-radio-button-input\"" + (checked ? " checked" : "") + ">"
                     + "<span class=\"ant-radio-button-inner\"></span>"
                 + "</span>"
                 + "<span>" + text + "</span>"
@@ -137,7 +137,7 @@ const attr = {
     steemit: {
         authorizationCheckbox: (name, text, checked) =>
             "<label>"
-                + "<input type=\"checkbox\" name=\"checky__" + name + "\" style=\"vertical-align: middle\"" + (checked ? " checked" : "") + ">"
+                + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"checky__authorization-checkbox\" style=\"vertical-align: middle\"" + (checked ? " checked" : "") + ">"
                 + "<span style=\"margin-left: 0.5rem; font-size: 1rem\">" + text + "</span>"
             + "</label>",
         authorizationSetting: () =>
@@ -276,7 +276,7 @@ const attr = {
         "<div class=\"col-md-4\">"
             + "<span class=\"text-semibold pl-10 pr-10\">"
                 + "<div class=\"p-default p-fill p-smooth p-bigger pretty\">"
-                    + "<input type=\"checkbox\" name=\"checky__" + name + "\"" + (checked ? " checked" : "") + ">"
+                    + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"checky__authorization-checkbox\"" + (checked ? " checked" : "") + ">"
                     + "<div class=\"state p-primary\">"
                         + "<label></label>"
                     + "</div>"
