@@ -106,7 +106,7 @@ const attr = {
             "<div class=\"Settings__section\">"
                 + "<h3><span>Suggestions order</span></h3>"
                 + "<p><span>You can pick the suggestions order that fits your needs the most.</span></p>"
-                + "<select name=\"select\">"
+                + "<select id=\"checky__sorting-order\" name=\"select\">"
                     + html.option("alphabetical+", "Alphabetical+", false, selectedValue === "alphabetical+")
                     + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
                     + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")
@@ -240,7 +240,7 @@ const attr = {
                 + "<div class=\"small-12 medium-6 large-12 columns\">"
                     + "<label>"
                         + "Suggestions order"
-                        + "<select name=\"select\">"
+                        + "<select id=\"checky__sorting-order\" name=\"select\">"
                             + html.option("alphabetical+", "Alphabetical+", false, selectedValue === "alphabetical+")
                             + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
                             + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")
@@ -398,7 +398,7 @@ const attr = {
                     + "<div class=\"text-muted\">Choose the way suggestions should be ordered.</div>"
                 + "</td>"
                 + "<td data-v-4c63a4f7 class=\"text-center no-padding-left no-border-top pr-10\" width=\"25%\">"
-                    + "<select name=\"select\" class=\"form-control\">"
+                    + "<select id=\"checky__sorting-order\" name=\"select\" class=\"form-control\">"
                         + html.option("alphabetical+", "Alphabetical+ (Default)", false, selectedValue === "alphabetical+")
                         + html.option("alphabetical", "Alphabetical", false, selectedValue === "alphabetical")
                         + html.option("most-mentioned", "Most mentioned (Coming soon)", true, selectedValue === "most-mentioned")

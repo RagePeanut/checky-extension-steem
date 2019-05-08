@@ -164,19 +164,27 @@ const editor = {
      */
     populateSuggestions: (suggestions, td, isFirstSuggestions) => {
         if(suggestions.length > 0) {
-            // Sorting the suggestions alphabetically and putting the suggestions with the same first character
-            // as the wrong mention in first
-            const wrongMentionStart = td.previousElementSibling.innerText[0];
-            suggestions = suggestions.sort((a, b) => {
-                if(wrongMentionStart === a[0]) {
-                    if(wrongMentionStart !== b[0]) {
-                        return -1;
-                    }
-                } else if(wrongMentionStart === b[0]) {
-                    return 1;
-                }
-                return a.localeCompare(b);
-            });
+            switch(sortingOrder) {
+                case "alphabetical+":
+                    // Sorting the suggestions alphabetically and putting the suggestions with the same first character
+                    // as the wrong mention in first
+                    const wrongMentionStart = td.previousElementSibling.innerText[0];
+                    suggestions = suggestions.sort((a, b) => {
+                        if(wrongMentionStart === a[0]) {
+                            if(wrongMentionStart !== b[0]) {
+                                return -1;
+                            }
+                        } else if(wrongMentionStart === b[0]) {
+                            return 1;
+                        }
+                        return a.localeCompare(b);
+                    });
+                    break;
+                case "alphabetical":
+                    // Sorting the suggestions alphabetically
+                    suggestions = suggestions.sort();
+                    break;
+            }
             let options = "";
             for(const suggestion of suggestions) {
                 options += html.option(suggestion, suggestion, false, false);
@@ -184,7 +192,7 @@ const editor = {
             td.innerHTML = html.suggestions(options, suggestions[0], editor.app, isFirstSuggestions);
             td.getElementsByTagName("select")[0].addEventListener("change", editor.changeUserPreview)
         } else {
-            const option = html.option("", "No username found", true, false);
+            const option = html.option("", "No username found", true, true);
             td.innerHTML = html.suggestions(option, null, editor.app, isFirstSuggestions);
         }
     },

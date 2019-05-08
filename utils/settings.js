@@ -27,7 +27,8 @@ const settings = {
             elements.checkyIgnoredFormRemoveAll = document.getElementById("checky__ignored-removeAll");
             if(elements.checkyIgnoredFormRemoveAll) elements.checkyIgnoredFormRemoveAll.addEventListener("click", settings.removeAllIgnored);
             const authorizationCheckboxes = [...document.getElementsByClassName("checky__authorization-checkbox") || []];
-            authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("click", settings.setAuthorizedApps));
+            authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("change", settings.setAuthorizedApps));
+            document.getElementById("checky__sorting-order").addEventListener("change", settings.setSortingOrder);
         }
     },
     /**
@@ -69,5 +70,12 @@ const settings = {
         }
         authorizations[event.target.name.split("__")[1]] = event.target.checked;
         chrome.storage.sync.set({authorizations: authorizations});
+    },
+    /**
+     * Sets the suggestions sorting order.
+     */
+    setSortingOrder: event => {
+        sortingOrder = event.target.value;
+        chrome.storage.sync.set({sortingOrder: sortingOrder});
     }
 }
