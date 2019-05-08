@@ -22,7 +22,7 @@ function urlUpdated(tabId, changeInfo, tab) {
                 break;
             case /#checky-settings/.test(tab.url):
                 data.page = "settings";
-            case /https:\/\/busy.org\/(activity|bookmarks|drafts|edit-profile|invite|settings)/.test(tab.url):
+            case /https:\/\/(staging\.)?busy.org\/(activity|bookmarks|drafts|edit-profile|invite|settings)/.test(tab.url):
             case data.app === "steemit" && /\/@[a-z\d.-]+(\/(comments|recent-replies|settings))?$/.test(tab.url):
             case data.app === "steempeak" && /\/@[a-z\d.-]+\/settings\/[a-z\d.-]/.test(tab.url):
                 if(!data.page) data.page = "menu";
