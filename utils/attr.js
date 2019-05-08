@@ -18,7 +18,8 @@ const attr = {
                         + attr.busy.authorizationCheckbox("steemit", "Steemit", authorizations.steemit)
                         + attr.busy.authorizationCheckbox("steempeak", "SteemPeak", authorizations.steempeak)
                     + "</div>"
-                + "</div>",
+                + "</div>"
+            + "</div>",
         baseEditor: {
             begin: 
                 "<div id=\"checky\" class=\"ant-row ant-form-item\" style=\"display: none\">"
@@ -51,9 +52,9 @@ const attr = {
             end:        "<button id=\"checky__save-settings\" class=\"Action Action--big Action--primary\"><span>Save</span></button>"
                         + "<div class=\"Settings__version\">"
                             + "<p><span>Version: " + chrome.runtime.getManifest().version + "</span></p>"
+                        + "</div>"
                     + "</div>"
-                    + "<br>"
-                    + "<h1>Ignored usernames</h1>"
+                    + "<h1><span>Ignored usernames</span></h1>"
                     + "<div id=\"checky__settings\" class=\"Settings\"></div>"
                 + "</div>"
         },

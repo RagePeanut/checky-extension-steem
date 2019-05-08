@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Checky",
-    "version": "0.2.11.0",
+    "version": "0.2.11.1",
     "description": "Checks the mentions before posting on a multitude of apps that post to the Steem blockchain.",
     "content_scripts": [
         {
