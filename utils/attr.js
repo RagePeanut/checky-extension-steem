@@ -49,6 +49,8 @@ const attr = {
                     + "<h1><span>Checky Settings</span></h1>"
                     + "<div class=\"Settings\">",
             end:        "<button id=\"checky__save-settings\" class=\"Action Action--big Action--primary\"><span>Save</span></button>"
+                        + "<div class=\"Settings__version\">"
+                            + "<p><span>Version: " + chrome.runtime.getManifest().version + "</span></p>"
                     + "</div>"
                     + "<br>"
                     + "<h1>Ignored usernames</h1>"
