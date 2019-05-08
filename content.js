@@ -26,6 +26,7 @@ function init(data) {
     if(data.page === "other") {
         elements = {};
         wrongMentions = [];
+        menu.hasBeenOnSettingsPage = false;
     } else {
         elements = currentPage === data.page || currentPage === "settings" && data.page === "menu" || currentPage === "menu" && data.page === "settings" ? elements : {};
         wrongMentions = currentPage === data.page ? wrongMentions : [];
