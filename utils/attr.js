@@ -142,7 +142,7 @@ const attr = {
         authorizationCheckbox: (name, text, checked) =>
             "<label>"
                 + "<input type=\"checkbox\" name=\"checky__" + name + "\" class=\"checky__authorization-checkbox\" onchange=\"document.getElementById('checky__save-settings').click()\" style=\"vertical-align: middle\"" + (checked ? " checked" : "") + ">"
-                + "<span style=\"margin-left: 0.5rem; font-size: 1rem; vertical-align: middle\">" + text + "</span>"
+                + "<span style=\"font-size: 1rem; vertical-align: middle\">" + text + "</span>"
             + "</label>",
         authorizationSetting: () =>
             "<div class=\"row\">"
