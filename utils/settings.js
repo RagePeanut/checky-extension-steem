@@ -1,11 +1,11 @@
 const settings = {
     app: null,
-    changeCheckboxClass: event => {
+    changeCheckboxClass: checkbox => {
         if(settings.app === "busy") {
-            if(event.target.checked) {
-                event.target.parentElement.parentElement.classList.add("ant-radio-button-wrapper-checked");
+            if(checkbox.checked) {
+                checkbox.parentElement.parentElement.classList.add("ant-radio-button-wrapper-checked");
             } else {
-                event.target.parentElement.parentElement.classList.remove("ant-radio-button-wrapper-checked");
+                checkbox.parentElement.parentElement.classList.remove("ant-radio-button-wrapper-checked");
             }
         }
     },
@@ -37,7 +37,13 @@ const settings = {
             if(elements.checkyIgnoredFormRemoveAll) elements.checkyIgnoredFormRemoveAll.addEventListener("click", settings.removeAllIgnored);
             document.getElementById("checky__save-settings").addEventListener("click", settings.saveSettings);
             elements.authorizationCheckboxes = [...document.getElementsByClassName("checky__authorization-checkbox") || []];
-            if(app === "busy") elements.authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("change", settings.changeCheckboxClass));
+            elements.authorizationCheckboxes.forEach(checkbox => checkbox.addEventListener("change", () => {
+                if(event.target.checked || elements.authorizationCheckboxes.some(checkbox => checkbox.checked)) {
+                    if(menu.app === "busy") settings.changeCheckboxClass(event.target);
+                } else {
+                    event.target.click();
+                }
+            }));
         }
     },
     /**
