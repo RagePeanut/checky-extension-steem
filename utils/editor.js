@@ -131,6 +131,7 @@ const editor = {
      * Initializes the extension editor variables and DOM elements.
      */
     init: async app => {
+        menu.hasBeenOnSettingsPage = false;
         if(!elements.checkyEditor) {
             editor.app = app;
             (await specs.editor.getInsertionLandmark(app)).insertAdjacentHTML("beforebegin", html.baseEditor(app));
