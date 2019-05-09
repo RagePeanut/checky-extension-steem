@@ -372,7 +372,7 @@ const attr = {
                                 + "<tr>"
                                     + "<td class=\"no-border-top no-padding-bottom\">"
                                         + "<div class=\"text-semibold\">"
-                                            + "<h5>Checky ignored usernames</h5>"
+                                            + "<h5>Ignored usernames</h5>"
                                         + "</div>"
                                         + "<div class=\"text-muted pb-10\">Check the ignored usernames you want to remove from the list.</div>"
                                         + "<form id=\"checky__ignored\" method=\"post\">",
