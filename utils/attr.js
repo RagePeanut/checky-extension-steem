@@ -401,7 +401,7 @@ const attr = {
                     + "<div class=\"text-muted\">Enable case sensitivity for the mention matching</div>"
                 + "</td>"
                 + "<td data-v-4c63a4f7 class=\"text-center\">"
-                    + "<label class=\"pt-15 vue-switcher" + (isCaseSensitive ? "" : "vue-switcher--unchecked") + " vue-switcher-theme--bootstrap vue-switcher-color--primary\">"
+                    + "<label class=\"pt-15 vue-switcher" + (isCaseSensitive ? "" : " vue-switcher--unchecked") + " vue-switcher-theme--bootstrap vue-switcher-color--primary\">"
                         + "<input id=\"checky__case-sensitivity\" type=\"checkbox\"" + (isCaseSensitive ? " checked" : "") + " onchange=\"this.checked ? this.parentElement.classList.remove('vue-switcher--unchecked') : this.parentElement.classList.add('vue-switcher--unchecked')\">"
                         + "<div></div>"
                     + "</label>"

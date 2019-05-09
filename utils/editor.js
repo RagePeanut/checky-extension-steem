@@ -69,7 +69,6 @@ const editor = {
      * @param {string} post The post to check
      */
     checkPost: post => {
-        console.log(isCaseSensitive);
         const mentionRegex = new RegExp("(^|[^\\w=/#])@([a-z][a-z\\d.-]*[a-z\\d])", isCaseSensitive ? "gmu" : "gimu");
         let matches = post.match(mentionRegex) || [];
         // The first character check handles the case of matches such as "@@mention"
