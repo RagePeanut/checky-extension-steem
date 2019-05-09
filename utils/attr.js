@@ -467,7 +467,7 @@ const attr = {
             class: ""
         },
         tr: {
-            style: ""
+            style: "height: 65px"
         },
         userpic: {
             class: "avatar",
