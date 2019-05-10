@@ -60,7 +60,7 @@ const editor = {
             return;
         }
         const event = new Event("input", { bubbles: true });
-        elements.textarea.value = elements.textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", "gi"), "@" + newUsername);
+        elements.textarea.value = elements.textarea.value.replace(new RegExp("@" + username + "(?![.-]?[a-z\\d])", isCaseSensitive ? "g" : "gi"), "@" + newUsername);
         elements.textarea.dispatchEvent(event);
     },
     /**
@@ -69,7 +69,8 @@ const editor = {
      * @param {string} post The post to check
      */
     checkPost: post => {
-        let matches = post.match(/(^|[^\w=/#])@([a-z][a-z\d.-]*[a-z\d])/gimu) || [];
+        const mentionRegex = new RegExp("(^|[^\\w=/#])@([a-z][a-z\\d.-]*[a-z\\d])", isCaseSensitive ? "gmu" : "gimu");
+        let matches = post.match(mentionRegex) || [];
         // The first character check handles the case of matches such as "@@mention"
         matches = matches.map(mention => {
             const splits = mention.split("@");
@@ -131,6 +132,7 @@ const editor = {
      * Initializes the extension editor variables and DOM elements.
      */
     init: async app => {
+        menu.hasBeenOnSettingsPage = false;
         if(!elements.checkyEditor) {
             editor.app = app;
             (await specs.editor.getInsertionLandmark(app)).insertAdjacentHTML("beforebegin", html.baseEditor(app));
@@ -164,27 +166,36 @@ const editor = {
      */
     populateSuggestions: (suggestions, td, isFirstSuggestions) => {
         if(suggestions.length > 0) {
-            // Sorting the suggestions alphabetically and putting the suggestions with the same first character
-            // as the wrong mention in first
-            const wrongMentionStart = td.previousElementSibling.innerText[0];
-            suggestions = suggestions.sort((a, b) => {
-                if(wrongMentionStart === a[0]) {
-                    if(wrongMentionStart !== b[0]) {
-                        return -1;
-                    }
-                } else if(wrongMentionStart === b[0]) {
-                    return 1;
-                }
-                return a.localeCompare(b);
-            });
+            switch(sortingOrder) {
+                case "alphabetical+":
+                    // Sorting the suggestions alphabetically and putting the suggestions with the same first character
+                    // as the wrong mention in first
+                    const wrongMentionStart = td.previousElementSibling.innerText[0];
+                    suggestions = suggestions.sort((a, b) => {
+                        if(wrongMentionStart === a[0]) {
+                            if(wrongMentionStart !== b[0]) {
+                                return -1;
+                            }
+                        } else if(wrongMentionStart === b[0]) {
+                            return 1;
+                        }
+                        return a.localeCompare(b);
+                    });
+                    break;
+                case "alphabetical":
+                    // Sorting the suggestions alphabetically
+                    suggestions = suggestions.sort();
+                    break;
+            }
             let options = "";
             for(const suggestion of suggestions) {
-                options += html.option(suggestion, false);
+                options += html.option(suggestion, suggestion, false, false);
             }
             td.innerHTML = html.suggestions(options, suggestions[0], editor.app, isFirstSuggestions);
             td.getElementsByTagName("select")[0].addEventListener("change", editor.changeUserPreview)
         } else {
-            td.innerHTML = html.suggestions(html.option("No username found", true), null, editor.app, isFirstSuggestions);
+            const option = html.option("", "No username found", true, true);
+            td.innerHTML = html.suggestions(option, null, editor.app, isFirstSuggestions);
         }
     },
     /**

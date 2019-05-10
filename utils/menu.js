@@ -8,7 +8,11 @@ const menu = {
         if(target.innerText !== "Rewards" && target.getAttribute("target") !== "_blank") {
             if(menu.isOnSettingsPage) {
                 if(target.innerText !== "Checky" && !/\n/.test(target.innerText)) {
-                    elements.checkyContent.style.display = "none";
+                    elements.checkyContents.forEach(checkyContent => {
+                        if(document.body.contains(checkyContent)) {
+                            checkyContent.style.display = "none";
+                        }
+                    });
                     elements.appContents.forEach(appContent => {
                         if(document.body.contains(appContent)) {
                             appContent.style.display = "block";
@@ -28,15 +32,19 @@ const menu = {
                                 appContent.style.display = "none";
                             }
                         });
-                        elements.checkyContent.style.display = "block";
+                        elements.checkyContents.forEach(checkyContent => {
+                            if(document.body.contains(checkyContent)) {
+                                checkyContent.style.display = "block";
+                            }
+                        });
                     }
                     const activeLink = specs.menu.getActiveLink(menu.app);
                     activeLink.className = "";
                     activeLink.parentElement.className = "";
                     elements.checkyLink.className = attr[menu.app].settingsLink.liClassActive;
                     elements.checkyLink.children[0].className = attr[menu.app].settingsLink.aClassActive;
-                } else if (document.contains(elements.checkyContent)) {
-                    elements.checkyContent.remove();
+                } else if (elements.checkyContents && document.contains(elements.checkyContents[0])) {
+                    elements.checkyContents[0].remove();
                 }
             }
         }

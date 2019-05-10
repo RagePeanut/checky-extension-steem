@@ -12,10 +12,16 @@ const html = {
             + "<tbody class=\"" + attr[app].tbody.class + "\"></tbody>"
         + "</table>"
         + attr[app].baseEditor.end,
-    baseSettings: (ignored, app) => 
+    baseSettings: (selectedValue, app) => 
         attr[app].baseSettings.begin
-        + html.ignoredAll(ignored, app)
+        + attr[app].sortingSetting(selectedValue)
+        + attr[app].authorizationSetting()
+        + attr[app].caseSensitivitySetting()
         + attr[app].baseSettings.end,
+    baseSettingsIgnored: (ignored, app) => 
+        attr[app].baseSettingsIgnored.begin
+        + html.ignoredAll(ignored, app)
+        + attr[app].baseSettingsIgnored.end,
     buttons: app => 
         "<button name=\"checky__replace\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">Replace</button>"
         + "<button name=\"checky__suggestions\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">Suggestions</button>"
@@ -41,7 +47,7 @@ const html = {
         return toReturn;
     },
     noIgnored: "<p style=\"margin-top: 1rem\"><span>No ignored usernames.</span></p>",
-    option: (suggestion, disabled) => "<option value=\"" + suggestion + (disabled ? " disabled\">" : "\">") + suggestion + "</option>",
+    option: (value, text, disabled, selected) => "<option value=\"" + value + "\"" + (disabled ? " disabled" : "") + (selected ? " selected" : "") + ">" + text + "</option>",
     replace: app => 
         html.userpic("null", app)
         + "<input type=\"text\" pattern=\"[A-Za-z][A-Za-z\\d.-]{1,}[A-Za-z\d]\" title=\"This username isn't valid.\" placeholder=\"Type a username here.\" class=\""
@@ -59,7 +65,7 @@ const html = {
         if(firstOption) toReturn += html.userpic(firstOption, app);
         toReturn += "<select class=\"" + attr[app].select.class + "\" style=\"vertical-align: middle; width: 30%; " + attr[app].select.style(!firstOption) + "\">" + options + "</select>";
         if(firstOption) toReturn += html.change(app);
-        if(isFirstSuggestions) toReturn += "<button name=\"check__more-suggestions\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">More Suggestions</button>";
+        if(isFirstSuggestions) toReturn += "<button name=\"checky__more-suggestions\" class=\"" + attr[app].button.class(false) + "\" style=\"" + attr[app].button.style + "\">More Suggestions</button>";
         toReturn += html.back(app);
         return toReturn;
     },
