@@ -4,27 +4,10 @@ const menu = {
      * @param {Event} event
      */
     changeLinkState: async (event) => {
-        const target = event.target.getAttribute("href") ? event.target : event.target.parentElement;
-        if(target.innerText !== "Rewards" && target.getAttribute("target") !== "_blank") {
-            if(menu.isOnSettingsPage) {
-                if(target.innerText !== "Checky" && !/\n/.test(target.innerText)) {
-                    elements.checkyContents.forEach(checkyContent => {
-                        if(document.body.contains(checkyContent)) {
-                            checkyContent.style.display = "none";
-                        }
-                    });
-                    elements.appContents.forEach(appContent => {
-                        if(document.body.contains(appContent)) {
-                            appContent.style.display = "block";
-                        }
-                    });
-                    elements.settingsLandmark.className = attr[menu.app].settingsLandmark.appClass;
-                    elements.checkyLink.className = "";
-                    elements.checkyLink.children[0].className = "";
-                    target.parentElement.className = attr[menu.app].settingsLink.liClassActive;
-                    target.className = attr[menu.app].settingsLink.aClassActive;
-                }
-            } else if(target.innerText.toLowerCase() === "checky") {
+        const target = event.target.tagName === "A" ? event.target : event.target.parentElement;
+        const href = target.getAttribute("href");
+        if(target.tagName === "A" && href !== "#" && target.getAttribute("target") !== "_blank") {
+            if(href === "#checky-settings") {
                 if(menu.app !== "steempeak") {
                     if(menu.hasBeenOnSettingsPage) {
                         elements.appContents.forEach(appContent => {
@@ -46,6 +29,22 @@ const menu = {
                 } else if (elements.checkyContents && document.contains(elements.checkyContents[0])) {
                     elements.checkyContents[0].remove();
                 }
+            } else if(menu.isOnSettingsPage) {
+                elements.checkyContents.forEach(checkyContent => {
+                    if(document.body.contains(checkyContent)) {
+                        checkyContent.style.display = "none";
+                    }
+                });
+                elements.appContents.forEach(appContent => {
+                    if(document.body.contains(appContent)) {
+                        appContent.style.display = "block";
+                    }
+                });
+                elements.settingsLandmark.className = attr[menu.app].settingsLandmark.appClass;
+                elements.checkyLink.className = "";
+                elements.checkyLink.children[0].className = "";
+                target.parentElement.className = attr[menu.app].settingsLink.liClassActive;
+                target.className = attr[menu.app].settingsLink.aClassActive;
             }
         }
     },

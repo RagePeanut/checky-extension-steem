@@ -3,7 +3,7 @@
     "author": "RagePeanut",
     "name": "Checky - Steem Mention Checker",
     "short_name": "Checky",
-    "version": "0.3.0.0",
+    "version": "0.3.0.1",
     "description": "Checks that the mentions in your post are correct before you post it on the Steem blockchain.",
     "icons": {
         "16": "img/icon/16x16.png",
