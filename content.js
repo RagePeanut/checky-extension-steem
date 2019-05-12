@@ -10,20 +10,12 @@ let wrongMentions;
 
 let authorizations, ignored, sortingOrder, isCaseSensitive;
 
-chrome.storage.sync.get(["ignored", "authorizations", "sortingOrder", "isCaseSensitive"], storage => {
-    ignored = storage.ignored || [];
-    authorizations = storage.authorizations || {
-        busy: true,
-        steemit: true,
-        steempeak: true
-    };
-    sortingOrder = storage.sortingOrder || "alphabetical+";
-    isCaseSensitive = storage.isCaseSensitive || false;
-});
-
 chrome.runtime.onMessage.addListener(init);
 
-function init(data) {
+async function init(data) {
+    if(!authorizations) {
+        await getStorageData();
+    }
     if(authorizations[data.app]) {
         if(data.page === "other") {
             elements = {};
@@ -37,4 +29,21 @@ function init(data) {
         }
         currentPage = data.page;
     }
+}
+
+function getStorageData() {
+    return new Promise(resolve => {
+        chrome.storage.sync.get(["ignored", "authorizations", "sortingOrder", "isCaseSensitive"], storage => {
+            storage = storage || {};
+            ignored = storage.ignored || [];
+            authorizations = storage.authorizations || {
+                busy: true,
+                steemit: true,
+                steempeak: true
+            };
+            sortingOrder = storage.sortingOrder || "alphabetical+";
+            isCaseSensitive = storage.isCaseSensitive || false;
+            resolve();
+        });
+    });
 }

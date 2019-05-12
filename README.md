@@ -1,4 +1,4 @@
-# Checky (0.3.0.1)
+# Checky (0.3.0.2)
 Inspired by [the bot of the same name](https://github.com/RagePeanut/checky), Checky is a cross-browser extension that checks the mentions of your post while you are writing it and warns you of the ones that don't match any user on the Steem blockchain.
 
 Checky helps you replace those wrong mentions quickly and efficiently by letting you pick or write the correct username and automatically change your post's mentions accordingly.
